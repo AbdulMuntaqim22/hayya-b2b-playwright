@@ -1,0 +1,9 @@
+{
+    "country": "Bahrain",
+    "countryCode": "BH",
+    "passportType": "Ordinary",
+    "passportNumber": "123456789",
+    "surname": "Doe",
+    "givenNames": "John",
+    "dateOfBirth": "1980-01-01"
+}

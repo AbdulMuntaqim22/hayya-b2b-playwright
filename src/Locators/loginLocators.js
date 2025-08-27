@@ -1,0 +1,20 @@
+
+export const LoginLocators = {
+    emailTxt: "//input[@name='email']",
+    passwordTxt: "//input[@name='password']",
+    loginBtn: "//button[@type='submit']",
+    profileIconBtn: "//img[@alt='User Profile']",
+    yopMailTxt: "#login",
+    refreshBtn: "#refreshbut",
+    otpEmailBtn: "(//button//div//span[text()='stg-noreply'])[1]",
+    mailContent: "#mail",
+    mailIframe: "#ifmail",
+    otp1: "#code-0",
+    otp2: "#code-1",
+    otp3: "#code-2",
+    otp4: "#code-3",
+    otp5: "#code-4",
+    otp6: "#code-5",
+    verifyBtn: "//button[text()='Verify']",
+    continueBtn: "//button[text()='Continue']",
+};

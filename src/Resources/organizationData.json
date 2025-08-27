@@ -1,0 +1,22 @@
+{
+    "orgData1":{
+        "orgName": "Tech Innovators Inc.",
+        "requestorName": "Alice Johnson",
+        "orgCategory": "default",
+        "qatarId": "123456789",
+        "dob": "15/03/1985",
+        "nationality": "Qatari",
+        "contactNumber": "13048005934",
+        "jobTitle": "ACCOUNTANT/AUDITOR",
+        "email": "testorganization@yopmail.com",
+        "establishmentNumber":"12-2222-22",
+        "signatoryName": "Alice Johnson",
+        "establishmentCardExpiry": "31/12/2025",
+        "businessQatarId": "1234567890",
+        "signatoryContactNumber": "13048005934",
+        "authorizerLetterPath": "src/Resources/authorizerLetter.pdf",
+        "establishmentCardPath": "src/Resources/commercialRegistration.pdf"
+    }
+
+    
+}
