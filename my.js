@@ -16,13 +16,7 @@ async function MyFunction(){
     await adminApi.init(); // Initialize the API instance
     await adminApi.GetAccessToken(credentials.adminUser);
 
-    var groupName="Group 12422";
-    for(let i = 0;i < groupName.split(',').length; i++){
-        // Deleting the Profile
-        await adminApi.deleteCompleteProfile(groupName.split(',')[i]);
-        // Deleting the Group
-        await adminApi.deleteGroup(visaData.orgName, groupName.split(',')[i]);
-    }    
+   await adminApi.deleteAllProfiles(); 
 
     await browser.close();
 }

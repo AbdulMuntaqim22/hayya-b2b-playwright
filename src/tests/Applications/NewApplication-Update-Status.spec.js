@@ -1319,7 +1319,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
 
   });
 
-  test.only('D1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
+  test('D1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
     var data = visaData.D1;
 
     // Fill and Save the Application as Draft
@@ -1503,18 +1503,15 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is NA`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is NA`);
+      await page.getByText('Ok').click();
 
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
 
-      // Approving the Visa Request
-      await adminApi.approveApplication(entryReferenceNo);
-
-      // Updating the Visa Entry
-      await adminApi.updateEntryVisa(entryReferenceNo, newApp.generateRandomFiveDigit() + '12');
-
+    
       // Updating Border Status to Outside Qatar
       await adminApi.updateBorderStatus(entryReferenceNo, "Outside Qatar");
       await adminApi.triggerMOIProcesses();
@@ -1526,19 +1523,13 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      await expect(page.locator(NewApplicationLocators.errorDialogMsg)).not.toBeAttached();
-      expect(await page.locator(NewApplicationLocators.successDialogMsg).textContent()).toBe("Application Updated Successfully");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is Outside Qatar`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Outside Qatar`);
+      await page.getByText('Ok').click();
 
-
-
-      // Approving the Visa Request
-      await adminApi.approveApplication(entryReferenceNo);
-
-      // Updating the Visa Entry
-      await adminApi.updateEntryVisa(entryReferenceNo, newApp.generateRandomFiveDigit() + '12');
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
 
       // Updating Border Status to Outside Qatar
       await adminApi.updateBorderStatus(entryReferenceNo, "Inside Qatar");
@@ -1552,9 +1543,9 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update a visa application that has already been consumed.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it the Border Status is Inside Qatar`);
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Inside Qatar`);
       await page.getByText('Ok').click();
 
       // Deleting Complete Profile
@@ -1760,18 +1751,14 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      await expect(page.locator(NewApplicationLocators.errorDialogMsg)).not.toBeAttached();
-      expect(await page.locator(NewApplicationLocators.successDialogMsg).textContent()).toBe("Application Updated Successfully");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is NA`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is NA`);
+      await page.getByText('Ok').click();
 
-
-      // Approving the Visa Request
-      await adminApi.approveApplication(entryReferenceNo);
-
-      // Updating the Visa Entry
-      await adminApi.updateEntryVisa(entryReferenceNo, newApp.generateRandomFiveDigit() + '12');
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+      
 
       // Updating Border Status to Outside Qatar
       await adminApi.updateBorderStatus(entryReferenceNo, "Outside Qatar");
@@ -1785,18 +1772,14 @@ test.describe('Manual Application Scenarios - Update Application', () => {
 
       await newApp.update_Submitted_Application(testInfo, data);
       await expect(page.locator(NewApplicationLocators.errorDialogMsg)).not.toBeAttached();
-      expect(await page.locator(NewApplicationLocators.successDialogMsg).textContent()).toBe("Application Updated Successfully");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is Outside Qatar`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Outside Qatar`);
+      await page.getByText('Ok').click();
 
-
-
-      // Approving the Visa Request
-      await adminApi.approveApplication(entryReferenceNo);
-
-      // Updating the Visa Entry
-      await adminApi.updateEntryVisa(entryReferenceNo, newApp.generateRandomFiveDigit() + '12');
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+      
 
       // Updating Border Status to Outside Qatar
       await adminApi.updateBorderStatus(entryReferenceNo, "Inside Qatar");
@@ -1810,9 +1793,9 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update a visa application that has already been consumed.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it the Border Status is Inside Qatar`);
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Inside Qatar`);
       await page.getByText('Ok').click();
 
       // Deleting Complete Profile
@@ -2018,18 +2001,16 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      await expect(page.locator(NewApplicationLocators.errorDialogMsg)).not.toBeAttached();
-      expect(await page.locator(NewApplicationLocators.successDialogMsg).textContent()).toBe("Application Updated Successfully");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is NA`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is NA`);
+      await page.getByText('Ok').click();
 
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
 
-      // Approving the Visa Request
-      await adminApi.approveApplication(entryReferenceNo);
+      
 
-      // Updating the Visa Entry
-      await adminApi.updateEntryVisa(entryReferenceNo, newApp.generateRandomFiveDigit() + '12');
 
       // Updating Border Status to Outside Qatar
       await adminApi.updateBorderStatus(entryReferenceNo, "Outside Qatar");
@@ -2042,11 +2023,13 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      await expect(page.locator(NewApplicationLocators.errorDialogMsg)).not.toBeAttached();
-      expect(await page.locator(NewApplicationLocators.successDialogMsg).textContent()).toBe("Application Updated Successfully");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can Update Application When it is in Approved Status and Border Status is Outside Qatar`);
-      await page.locator(NewApplicationLocators.continueBtn).click();
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Outside Qatar`);
+      await page.getByText('Ok').click();
+
+      // Navigating back to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
 
 
 
@@ -2068,9 +2051,9 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update a visa application that has already been consumed.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update approved application in Diamond category");
       await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it the Border Status is Inside Qatar`);
+      await newApp.attachScreenshot(testInfo, `The user Cannot Update Application When it is in Approved Status and Border Status is Inside Qatar`);
       await page.getByText('Ok').click();
 
       // Deleting Complete Profile

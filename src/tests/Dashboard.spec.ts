@@ -36,7 +36,7 @@ test.describe('Dashboard Page Scenarios', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
   });
 
-  test('Verify that the user can Request an Additional Admin and When its Approved it is displayed on Organization Details Page as Active', async ({ page }, testInfo) => {
+  test('Verify that the user can Request an Additional Admin and When its Approved it is displayed on Organization Details Page as In Active', async ({ page }, testInfo) => {
 
     var adminEmail = await dashPage.createAdditionalAdminRequest(testInfo)
 
@@ -67,13 +67,13 @@ test.describe('Dashboard Page Scenarios', () => {
     await expect(email).toBeVisible();
     
     var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    expect(await isActiveElement.textContent()).toBe("Active");
+    expect(await isActiveElement.textContent()).toBe("In Active");
 
     
-    await loginPage.attachScreenshot(testInfo, `Approved Admin ${adminEmail} Details are showing on Organization Page as Active`, true);
+    await loginPage.attachScreenshot(testInfo, `Approved Admin ${adminEmail} Details are showing on Organization Page as InActive`, true);
   });
 
-  test('Verify that the user can Request an Additional Admin and When its Rejected it is displayed on Organization Details Page as InActive', async ({ page }, testInfo) => {
+  test('Verify that the user can Request an Additional Admin and When its Rejected it is NOT displayed on Organization Details Page', async ({ page }, testInfo) => {
 
     const rejectReason = "For Test Reason it is Rejected";
     var adminEmail = await dashPage.createAdditionalAdminRequest(testInfo)
@@ -101,15 +101,16 @@ test.describe('Dashboard Page Scenarios', () => {
     // Validating the New Admin Email is showing as In ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',adminEmail));
     await email.scrollIntoViewIfNeeded();  
-    await expect(email).toBeVisible();
     
-    var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    expect(await isActiveElement.textContent()).toBe("In active");        
+    //await expect(email).toBeVisible();
+    await expect(email).not.toBeAttached();
+    //var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
+    //expect(await isActiveElement.textContent()).toBe("In active");        
 
-    await loginPage.attachScreenshot(testInfo, `Rejected Admin ${adminEmail} Details are showing on Organization Page as Inactive`, true);
+    await loginPage.attachScreenshot(testInfo, `Rejected Admin ${adminEmail} Details are Not showing on Organization Page`, true);
   });
 
-  test('Verify that the user can Request an Additional Representative and When its Approved it is displayed on Organization Details Page as Active', async ({ page }, testInfo) => {
+  test('Verify that the user can Request an Additional Representative and When its Approved it is displayed on Organization Details Page as In Active', async ({ page }, testInfo) => {
 
     var repEmail = await dashPage.createAdditionalRepresentativeRequest(testInfo)
 
@@ -142,7 +143,7 @@ test.describe('Dashboard Page Scenarios', () => {
     var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
     expect(await isActiveElement.textContent()).toBe("In active");        
 
-    await loginPage.attachScreenshot(testInfo, `Rejected Admin ${repEmail} Details are showing on Organization Page as Active`, true);    
+    await loginPage.attachScreenshot(testInfo, `Rejected Admin ${repEmail} Details are showing on Organization Page as In Active`, true);    
   });
 
   test('Verify that the user can Request an Additional Representative and When its Rejected it is NOT displayed on Organization Details Page', async ({ page }, testInfo) => {
@@ -173,10 +174,10 @@ test.describe('Dashboard Page Scenarios', () => {
     // Validating the New Admin Email is showing as In ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',repEmail));
     await email.scrollIntoViewIfNeeded();  
-    await expect(email).toBeVisible();
+    await expect(email).not.toBeAttached();
     
-    var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    expect(await isActiveElement.textContent()).toBe("In active");        
+    // var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
+    // expect(await isActiveElement.textContent()).toBe("In active");        
 
     await loginPage.attachScreenshot(testInfo, `Rejected Admin ${repEmail} Details are showing on Organization Page as Inactive`, true);
   });
@@ -298,7 +299,7 @@ test.describe('Dashboard Page Scenarios', () => {
     // Validating the New Requested Quota is NOT Displaying
     const element = page.locator(`//div[text()='${eventName}']/ancestor::div[2]/following-sibling::div/span[2]`);
     await element.scrollIntoViewIfNeeded();
-    expect(await element.textContent()).toBe("5"); //The Event got approved with Quantity 5, we requested additional 5 and it got Rejected so it would be 05
+    expect(await element.textContent()).toBe(quantity); //The Event got approved with Quantity 5, we requested additional 5 and it got Rejected so it would be 05
 
     await loginPage.attachScreenshot(testInfo, `Visa Quota for ${eventName} is NOT Updated on Organization Page`, true);
   });

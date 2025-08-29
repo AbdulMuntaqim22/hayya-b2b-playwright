@@ -113,10 +113,10 @@ class DashboardPage extends BasePage {
         await this.page.waitForTimeout(1000); // Wait for the page to load complete
 
         // Selecting the Event
-        await this.page.locator(DashboardLocators.selectVisaTypeSelect).click();
+        await this.page.locator(DashboardLocators.vq_selectVisaTypeSelect).click();
         await this.page.locator(DashboardLocators.options).locator("//li[text()='" + eventName + "']").click();
 
-        await this.page.locator(DashboardLocators.noOfVisaTxt).fill(qty);
+        await this.page.locator(DashboardLocators.vq_noOfVisaTxt).fill(qty);
         await this.page.locator(DashboardLocators.addBtn).click();
 
         await this.attachScreenshot(testInfo, `Visa Request details added for ${eventName}`);
@@ -166,10 +166,10 @@ class DashboardPage extends BasePage {
         await this.page.waitForTimeout(1000); // Wait for the page to load complete
 
         // Selecting the Event
-        await this.page.locator(DashboardLocators.selectVisaTypeSelect).click();
+        await this.page.locator(DashboardLocators.ns_selectVisaTypeSelect).click();
         await this.page.locator(DashboardLocators.options).locator("//li[text()='" + visaName + "']").click();
 
-        await this.page.locator(DashboardLocators.noOfVisaTxt).fill(qty);
+        await this.page.locator(DashboardLocators.ns_noOfVisaTxt).fill(qty);
         await this.page.locator(DashboardLocators.addBtn).click();
 
         await this.attachScreenshot(testInfo, `New Visa Request details added for ${visaName} Visa`);

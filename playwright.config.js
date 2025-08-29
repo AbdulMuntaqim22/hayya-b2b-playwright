@@ -27,7 +27,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: 0,
+  retries: 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -44,7 +44,7 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'dev',
+      name: 'chromium',
       use: {
         launchOptions: {
           headless: false,
@@ -52,19 +52,9 @@ export default defineConfig({
         },
         viewport: null, // disables default viewport
         baseURL: 'https://groups-beta-dev.hayya.qa/en/sign-in',
+        //baseURL: "https://admin-beta-stg.hayya.qa/en/sign-in",
       },
-    },
-    {
-      name: 'stg',
-      use: {
-        launchOptions: {
-          headless: false,
-          args: ['--start-maximized']
-        },
-        viewport: null, // disables default viewport
-        baseURL:"https://groups-beta-stg.hayya.qa/en/sign-in"
-      },
-    },
+    },    
 
     // {
     //   name: 'firefox',

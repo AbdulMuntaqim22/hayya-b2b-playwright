@@ -149,6 +149,20 @@ async GetAccessToken(credentials) {
     expect(delProfile.statusCode).toBe(200);
   }
 
+  async deleteAllProfiles(){
+    let profileId=[];
+    // Retrieving All Submitted Applications Data
+    const subApp = await this.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": "Test Automation" });
+    const subAppGlobalId = subApp.jsonResponse.result.map(app => app.globalId);
+    for (let i = 0; i < subAppGlobalId.length; i++) {
+      let getAppData = await this.GetRequest(`/api/b2b/v1/OrganizationGroup/get-application-by-id/${subAppGlobalId[i]}`);
+      profileId.push(getAppData.result.userProfileId);
+    }
+    // Deleting the Profile
+    const delProfile = await this.DeleteRequestWithPayload('/api/b2c/v1/UserProfile/delete-complete-profile', profileId);
+    expect(delProfile.statusCode).toBe(200);
+  }
+
   async approveApplication(entryReferenceNo){
     // Approving the Visa Request
     const approveResponse = await this.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "approved", "rejectionReason": null, "isEditable": false, "visaApplication": null });
