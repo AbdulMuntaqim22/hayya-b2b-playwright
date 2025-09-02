@@ -32,6 +32,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
     await adminApi.init(); // Initialize the API instance
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
+    await adminApi.deleteAllProfiles();
 
     // Logging in before each test    
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);

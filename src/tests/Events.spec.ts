@@ -378,14 +378,14 @@ test.describe('Events Page Scenarios', () => {
     await page.locator(DashboardLocators.dashboardLeftMenuBtn).click();
     await page.waitForLoadState('domcontentloaded');
 
-    // Opening dropdown and Select Additional Service option    
+    // Opening dropdown and Select Visa Quota option    
     await page.locator(DashboardLocators.additionalRequestsSelect).click();
     await page.locator(DashboardLocators.options).locator("//li[text()='Visa Quota']").click();
 
     await page.waitForTimeout(1000);
 
     // expanding the Select Visa Type dropdown
-    await page.locator(DashboardLocators.selectVisaTypeSelect).click();
+    await page.locator(DashboardLocators.visaQuota_selectVisaTypeSelect).click();
 
     await page.waitForTimeout(1000);
 
@@ -611,7 +611,7 @@ test.describe('Events Page Scenarios', () => {
   await page.waitForTimeout(1000);
 
   // expanding the Select Visa Type dropdown
-  await page.locator(DashboardLocators.selectVisaTypeSelect).click();
+  await page.locator(DashboardLocators.visaQuota_selectVisaTypeSelect).click();
 
   await page.waitForTimeout(1000);
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import fs from 'fs';
+import fs, { stat } from 'fs';
 import LoginPage from '../Pages/loginPage';
 import DashboardPage from '../Pages/dashboardPage';
 import EventsPage from '../Pages/eventsPage';
@@ -63,11 +63,14 @@ test.describe('Dashboard Page Scenarios', () => {
 
     // Validating the New Admin Email is showing as ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',adminEmail));
+    const status = email.locator("xpath=/ancestor::div[contains(@class,'space')]/preceding-sibling::div//p[text()='Status']/following-sibling::p");
     await email.scrollIntoViewIfNeeded();  
-    await expect(email).toBeVisible();
+    
+    // verifying the Status is Approved
+    expect(await status.textContent()).toBe("Approved");
     
     var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    expect(await isActiveElement.textContent()).toBe("In Active");
+    expect(await isActiveElement.textContent()).toBe("In active");
 
     
     await loginPage.attachScreenshot(testInfo, `Approved Admin ${adminEmail} Details are showing on Organization Page as InActive`, true);
@@ -100,12 +103,14 @@ test.describe('Dashboard Page Scenarios', () => {
 
     // Validating the New Admin Email is showing as In ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',adminEmail));
+    const status = email.locator("xpath=/ancestor::div[contains(@class,'space')]/preceding-sibling::div//p[text()='Status']/following-sibling::p");
     await email.scrollIntoViewIfNeeded();  
     
-    //await expect(email).toBeVisible();
-    await expect(email).not.toBeAttached();
-    //var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    //expect(await isActiveElement.textContent()).toBe("In active");        
+    // verifying the Status is Pending
+    expect(await status.textContent()).toBe("Pending");
+    
+    var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
+    expect(await isActiveElement.textContent()).toBe("In active");        
 
     await loginPage.attachScreenshot(testInfo, `Rejected Admin ${adminEmail} Details are Not showing on Organization Page`, true);
   });
@@ -137,13 +142,16 @@ test.describe('Dashboard Page Scenarios', () => {
 
     // Validating the New Admin Email is showing as ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',repEmail));
+    const status = email.locator("xpath=/ancestor::div[contains(@class,'space')]/preceding-sibling::div//p[text()='Status']/following-sibling::p");
     await email.scrollIntoViewIfNeeded();  
-    await expect(email).toBeVisible();
+    
+    // verifying the Status is Approved
+    expect(await status.textContent()).toBe("Approved");
     
     var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
     expect(await isActiveElement.textContent()).toBe("In active");        
 
-    await loginPage.attachScreenshot(testInfo, `Rejected Admin ${repEmail} Details are showing on Organization Page as In Active`, true);    
+    await loginPage.attachScreenshot(testInfo, `Approved Admin ${repEmail} Details are showing on Organization Page as In Active`, true);    
   });
 
   test('Verify that the user can Request an Additional Representative and When its Rejected it is NOT displayed on Organization Details Page', async ({ page }, testInfo) => {
@@ -173,11 +181,14 @@ test.describe('Dashboard Page Scenarios', () => {
 
     // Validating the New Admin Email is showing as In ACTIVE
     const email = page.locator(OrganizationLocators.emailTxt.replace('{AdminEmail}',repEmail));
+    const status = email.locator("xpath=/ancestor::div[contains(@class,'space')]/preceding-sibling::div//p[text()='Status']/following-sibling::p");
     await email.scrollIntoViewIfNeeded();  
-    await expect(email).not.toBeAttached();
     
-    // var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
-    // expect(await isActiveElement.textContent()).toBe("In active");        
+    // verifying the Status is Rejected
+    expect(await status.textContent()).toBe("Pending");
+    
+    var isActiveElement= email.locator("xpath=/ancestor::div[contains(@class,'grid')]/preceding-sibling::div//span");
+    expect(await isActiveElement.textContent()).toBe("In active");        
 
     await loginPage.attachScreenshot(testInfo, `Rejected Admin ${repEmail} Details are showing on Organization Page as Inactive`, true);
   });

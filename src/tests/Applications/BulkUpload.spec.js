@@ -31,6 +31,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
     await adminApi.init(); // Initialize the API instance
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
+    await adminApi.deleteAllProfiles();
 
     // Logging in before each test    
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
@@ -1258,6 +1259,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     console.log(`Test completed: ${testInfo.title} with status: ${testInfo.status}`);
     // For example, you might want to take a screenshot or log out
     await loginPage.attachScreenshot(testInfo, 'Test Completed');
+    await adminApi.deleteAllProfiles();
 
   });
 
