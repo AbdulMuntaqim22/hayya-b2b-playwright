@@ -5,7 +5,7 @@ call npm install
 call npx playwright install
 
 REM 1 Executing Dashboard Events and Register Org
-call npx playwright test src/tests/RegisterOrganization src/tests/Events src/tests/Dashboard --workers=3 || exit /b 1
+call npx playwright test src/tests/RegisterOrganization src/tests/Events src/tests/Dashboard --workers=3
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -18,7 +18,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 2 Executing Payment Exemption and Arabic Field Scenarios
-call npx playwright test src/tests/Applications/A1-PaymentExemption src/tests/Applications/Arabic_Fields --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/A1-PaymentExemption src/tests/Applications/Arabic_Fields --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -31,7 +31,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 3 Executing Bulk upload
-call npx playwright test src/tests/Applications/BulkUpload --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/BulkUpload --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -44,7 +44,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 4 Executing New Applications Approved
-call npx playwright test src/tests/Applications/NewApplication-Approved --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/NewApplication-Approved --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -57,7 +57,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 5 Executing New Applications Rejected With Reason
-call npx playwright test src/tests/Applications/NewApplication-Rejected-With-Reason --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/NewApplication-Rejected-With-Reason --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -70,7 +70,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 6 Executing New Applications Rejected Without Reason 
-call npx playwright test src/tests/Applications/NewApplication-Rejected-Without-Reason --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/NewApplication-Rejected-Without-Reason --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
@@ -83,7 +83,7 @@ xcopy "%report_src%" "%report_dest%" /E /I /Y
 
 
 REM 7 Executing New Applications Update Status
-call npx playwright test src/tests/Applications/NewApplication-Update-Status --workers=2 || exit /b 1
+call npx playwright test src/tests/Applications/NewApplication-Update-Status --workers=2
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"

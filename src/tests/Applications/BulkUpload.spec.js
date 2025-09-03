@@ -7,6 +7,7 @@ const { NewApplicationLocators } = require('../../Locators/newApplicationlocator
 const { AllApplicationLocators } = require('../../Locators/allApplicationLocators');
 const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
+test.describe.configure({ mode: 'parallel' }); 
 
 test.describe('Bulk Upload Application Scenarios', () => {
   /** @type {LoginPage} */

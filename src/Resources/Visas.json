@@ -37,15 +37,15 @@
     "accommodationDetails": "Not Decided",
     "purposeOfVisit": "Business Meeting",
     "passportType": "Normal",
-    "personalPhoto": "./src/Resources/Passports/Algeria/Pic 1.jpg",
-    "passportPhoto": "./src/Resources/Passports/Algeria/Passport 1.jpg",
+    "personalPhoto": "./src/Resources/Passports/Libya/Pic 2.jpg",
+    "passportPhoto": "./src/Resources/Passports/Libya/Passport 2.jpg",
     "contactNo": "123456789",
     "emergencyNo": "987654321",
     "schengenFront": "./src/Resources/Passports/Palestine/Passport 2.jpg",
     "schengenBack": "./src/Resources/Passports/Palestine/Passport 2.jpg",
-    "country": "Algeria",
+    "country": "Libya",
     "otherNationality": true,
-    "countryOfResidence": "Algeria"
+    "countryOfResidence": "Libya"
   },
   "A4": {
     "visaCat": "Tourist",
