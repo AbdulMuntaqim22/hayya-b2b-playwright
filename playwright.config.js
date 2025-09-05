@@ -50,7 +50,7 @@ export default defineConfig({
           headless: false,
           args: ['--start-maximized']
         },
-        viewport: null, // disables default viewport
+        viewport: {width:1920, height:1080}, // disables default viewport
         baseURL: 'https://groups-beta-dev.hayya.qa/en/sign-in',
         //baseURL: "https://admin-beta-stg.hayya.qa/en/sign-in",
       },
