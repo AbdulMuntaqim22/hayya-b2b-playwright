@@ -224,7 +224,7 @@
     "visaCat": "Diamond Visa",
     "visaType": "D2 - Diamond Hayya Talent",
     "accommodationDetails": "Not Decided",
-    "zipFile": "./src/Resources/Bulk_Attachments - A3.zip",
+    "zipFile": "./src/Resources/Bulk_Attachments - A2.zip",
     "docType": "Passport",      
     "applicantType": "International",
     "D2":{              
@@ -255,9 +255,9 @@
     "zipFile": "./src/Resources/Bulk_Attachments - A3.zip",
     "docType": "Passport",      
     "applicantType": "International",
-    "D2":{      
+    "D3":{      
         "applicantType": "International",
-        "occupationType": "Hayya Entrepreneur",
+        "occupationType": "Doctor",
         "purposeOfVisit": "Business Meeting",
         "passportType": "Normal",        
         "placeOfBirth": "Dont Know",

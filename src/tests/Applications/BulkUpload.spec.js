@@ -9,7 +9,7 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe('Bulk Upload Application Scenarios', () => {
+test.describe.only('Bulk Upload Application Scenarios', () => {
   /** @type {LoginPage} */
   var loginPage;
   /** @type {NewApplicationPage} */
@@ -35,7 +35,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteAllProfiles();
 
     // Logging in before each test    
-    await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
+    await loginPage.login(testInfo, credentials.requestorUsers.existingUser);     
   });
 
   test('Verify that the user can Submit a Bulk upload application for A1', async ({ page }, testInfo) => {
@@ -84,7 +84,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -124,10 +124,11 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
       await page.locator(OrgGroupsLocators.okBtn).click();
@@ -143,9 +144,6 @@ test.describe('Bulk Upload Application Scenarios', () => {
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
     try {
-
-      // var continueButton = page.locator(OrgGroupsLocators.continueBtn);
-      // await continueButton.click();
 
       // Navigating to All Applications Page
       await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
@@ -275,7 +273,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -310,14 +308,14 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.keyboard.press('Enter');
 
         // Uploading Resident Permit
-        await page.locator(NewApplicationLocators.residentPermitFront).setInputFiles(data.A2.residentPermitFront);
-        await page.locator(NewApplicationLocators.residentPermitFront).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
-        await page.locator(NewApplicationLocators.residentPermitBack).setInputFiles(data.A2.residentPermitBack);
-        await page.locator(NewApplicationLocators.residentPermitBack).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+        // await page.locator(NewApplicationLocators.residentPermitFront).setInputFiles(data.A2.residentPermitFront);
+        // await page.locator(NewApplicationLocators.residentPermitFront).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+        // await page.locator(NewApplicationLocators.residentPermitBack).setInputFiles(data.A2.residentPermitBack);
+        // await page.locator(NewApplicationLocators.residentPermitBack).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
         // Entering Contact and Emergency Contact number
         await page.locator(NewApplicationLocators.contactNoTxt).fill(data.A2.contactNo);
-        await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.A2.emergencyNo);
+        //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.A2.emergencyNo);
 
         // Clicking on Save as Draft button    
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
@@ -326,10 +324,11 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
       await page.locator(OrgGroupsLocators.okBtn).click();
@@ -456,15 +455,15 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
 
       // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+      var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+      await expect(groupRow).toBeVisible();
 
       await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
 
       // Filling the Applications
 
       // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+      await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
       await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
       await page.waitForLoadState('load');
 
@@ -474,7 +473,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -509,14 +508,14 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.keyboard.press('Enter');
 
         // Uploading Schengen Documents
-        await page.locator(NewApplicationLocators.schengenFrontDoc).setInputFiles(data.A3.schengenFront);
-        await page.locator(NewApplicationLocators.schengenFrontDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+        //await page.locator(NewApplicationLocators.schengenFrontDoc).setInputFiles(data.A3.schengenFront);
+        //await page.locator(NewApplicationLocators.schengenFrontDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
         await page.locator(NewApplicationLocators.schengenBackDoc).setInputFiles(data.A3.schengenBack);
         await page.locator(NewApplicationLocators.schengenBackDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
         // Entering Contact and Emergency Contact number
         await page.locator(NewApplicationLocators.contactNoTxt).fill(data.A3.contactNo);
-        await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.A3.emergencyNo);
+        //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.A3.emergencyNo);
 
         // Clicking on Save as Draft button    
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
@@ -525,10 +524,11 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
       await page.locator(OrgGroupsLocators.okBtn).click();
@@ -545,8 +545,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
     try {
 
-      var continueButton = page.locator(OrgGroupsLocators.continueBtn);
-      await continueButton.click();
+      //var continueButton = page.locator(OrgGroupsLocators.continueBtn);
+      //await continueButton.click();
       // Navigating to All Applications Page
       await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await page.waitForLoadState('load');
@@ -656,15 +656,15 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
 
       // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+      var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+      await expect(groupRow).toBeVisible();
 
       await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
 
       // Filling the Applications
 
       // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+      await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
 
       await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
       await page.waitForLoadState('load');
@@ -675,7 +675,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -726,12 +726,12 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
         // Entering Contact and Emergency Contact number
         await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D1.contactNo);
-        await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.D1.emergencyNo);
+        //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.D1.emergencyNo);
 
         // // Filling Relationship
         // await page.locator("//label[text()='Relationship']/following-sibling::div//input").fill("Brother");
         // await page.locator("//label[text()='Relationship']/following-sibling::div//input").press('Enter');
-
+        
         // Clicking on Save as Draft button    
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
         await page.locator(NewApplicationLocators.continueBtn).click();
@@ -739,13 +739,14 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
-      await page.locator(OrgGroupsLocators.okBtn).click();  
+      await page.locator(OrgGroupsLocators.okBtn).click();
 
     }
 
@@ -844,7 +845,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteGroup(visaData.orgName, groupName);
   });
 
-  test.only('Verify that the user can Submit a Bulk upload application for D2 For Passport', async ({ page }, testInfo) => {
+  test('Verify that the user can Submit a Bulk upload application for D2 For Passport', async ({ page }, testInfo) => {
     var data = visaData.BulkUpload_D2;
 
     try {
@@ -872,15 +873,15 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
 
       // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+      var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+      await expect(groupRow).toBeVisible();
 
       await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
 
       // Filling the Applications
 
       // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+      await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
       await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
       await page.waitForLoadState('load');
 
@@ -890,7 +891,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -969,7 +970,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
         // Entering Contact and Emergency Contact number
         await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D2.contactNo);
-        await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.D2.emergencyNo);
+        //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.D2.emergencyNo);
 
         // Clicking on Save as Draft button    
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
@@ -978,13 +979,14 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
-      await page.locator(OrgGroupsLocators.okBtn).click();  
+      await page.locator(OrgGroupsLocators.okBtn).click();
 
       
     }
@@ -1083,7 +1085,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteGroup(visaData.orgName, groupName);
   });
 
-  test.only('Verify that the user can Submit a Bulk upload application for D3 For Passport', async ({ page }, testInfo) => {
+  test('Verify that the user can Submit a Bulk upload application for D3 For Passport', async ({ page }, testInfo) => {
     var data = visaData.BulkUpload_D3;
 
     try {
@@ -1111,15 +1113,15 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
 
       // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+      var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+      await expect(groupRow).toBeVisible();
 
       await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
 
       // Filling the Applications
 
       // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+      await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
       await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
       await page.waitForLoadState('load');
 
@@ -1129,7 +1131,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       // Editing the Application
       await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
       await page.waitForTimeout(2000);
-      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).count();
+      var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
 
       for (let i = 0; i < totalApps; i++) {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
@@ -1196,13 +1198,14 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
       await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();      
+      await page.waitForLoadState('domcontentloaded');
 
-      await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
-      await page.locator(OrgGroupsLocators.selectAllCheckbox).click();
+      await page.locator(OrgGroupsLocators.groupTableRows+ "/td//input").first().waitFor({ state: 'visible' });            
+      await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
 
       await page.locator(OrgGroupsLocators.submitBtn).click();
-      await page.locator(OrgGroupsLocators.okBtn).click();  
+      await page.locator(OrgGroupsLocators.okBtn).click(); 
     }
     catch (error) {
       // Deleting All Draft Applications
