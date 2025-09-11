@@ -89,5 +89,25 @@ class BasePage {
       contentType: 'image/png',
     });
   }
+
+  // Function to get a date object from a custom date string
+  getDateJsonObject({ days = 0, months = 0, years = 0 } = {}){
+    var now = new Date();
+      var futureDate = new Date(Date.UTC(
+        now.getFullYear() + years,
+        now.getMonth() + months,
+        now.getDate() + days,
+        now.getHours(),
+      ));
+
+      // Shift to Qatar timezone (UTC+3)
+      futureDate.setHours(futureDate.getHours() - 2);
+
+      var day = futureDate.getUTCDate().toString().padStart(2, '0');
+      var month = futureDate.toLocaleString('default', { month: 'short' }).slice(0, 3);
+      var year = futureDate.getUTCFullYear();
+
+      return {"day":day, "monthStr":month,"month":futureDate.getMonth()+1, "year":year};
+  }
 }
 export default BasePage;

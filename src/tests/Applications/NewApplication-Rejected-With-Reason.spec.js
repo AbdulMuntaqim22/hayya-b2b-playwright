@@ -7,7 +7,7 @@ const { NewApplicationLocators } = require('../../Locators/newApplicationlocator
 const { AllApplicationLocators } = require('../../Locators/allApplicationLocators');
 const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
-test.describe.configure({ mode: 'parallel' }); 
+test.describe.configure({ mode: 'parallel' });
 
 test.describe('Manual Application Scenarios - Rejected With Reason', () => {
   /** @type {LoginPage} */
@@ -42,7 +42,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
     await adminApi.deleteAllProfiles();
   });
 
-  test('A1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('A1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.A1;
 
@@ -147,23 +147,22 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
-
-        await page.locator(NewApplicationLocators.otherNationalityNoOption).check();        
+        
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
         await page.locator(NewApplicationLocators.continueBtn).click();
 
@@ -183,14 +182,31 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // // Verifying that the Edit Application button is not visible
+      // await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+      // await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+      // await page.waitForLoadState('load');
+      // await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      // await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      await page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+
+      await page.getByText("Ok").click();
 
 
     } catch (error) {
@@ -210,7 +226,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -232,7 +248,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('A2: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('A2: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.A2;
 
@@ -337,24 +353,24 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
-        await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-        await page.keyboard.press("Enter");
+        // await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
+        // await page.keyboard.press("Enter");
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
         await page.locator(NewApplicationLocators.continueBtn).click();
 
@@ -374,14 +390,29 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // // Verifying that the Edit Application button is not visible
+      // await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+      // await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+      // await page.waitForLoadState('load');
+      // await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      // await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click();
 
 
     } catch (error) {
@@ -401,7 +432,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft      
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -423,7 +454,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('A3: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('A3: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.A3;
 
@@ -528,19 +559,19 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
@@ -565,14 +596,24 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
+      await page.keyboard.press("Enter");
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click();
 
 
     } catch (error) {
@@ -592,7 +633,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -614,7 +655,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('A4: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('A4: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.A4;
 
@@ -716,22 +757,20 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
       await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();      
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-        await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-        await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+        await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();        
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
@@ -756,14 +795,23 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();      
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
+      await page.keyboard.press("Enter");
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click();      
 
 
     } catch (error) {
@@ -783,7 +831,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -805,7 +853,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('F1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('F1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.F1;
 
@@ -910,24 +958,22 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
-
-        await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-        await page.keyboard.press("Enter");
+        
         await page.locator(NewApplicationLocators.updateApplicationBtn).click();
         await page.locator(NewApplicationLocators.continueBtn).click();
 
@@ -947,14 +993,23 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
+      
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();      
+      
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click(); 
 
 
     } catch (error) {
@@ -974,7 +1029,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -996,7 +1051,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('D1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('D1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.D1;
 
@@ -1101,19 +1156,19 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
@@ -1138,14 +1193,22 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
+      
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click(); 
 
 
     } catch (error) {
@@ -1165,7 +1228,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -1187,7 +1250,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('D2: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('D2: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.D2;
 
@@ -1292,19 +1355,19 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
@@ -1329,14 +1392,22 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
+      
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click(); 
 
 
     } catch (error) {
@@ -1356,7 +1427,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -1378,7 +1449,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
   });
 
-  test('D3: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
+  test('D3: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
 
     var data = visaData.D3;
 
@@ -1483,19 +1554,19 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
       await expect(page.locator(AllApplicationLocators.editAppBtn)).toBeVisible();
       await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason should be displayed.`);
 
 
       // Updating the Application and Re-Applying for Visa 5 Times
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         // Navigating to All Applications Page
         await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
         await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
         await page.locator(AllApplicationLocators.viewDetailsBtn).click();
         await page.waitForLoadState('load');
-        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
+        await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
         await page.locator(AllApplicationLocators.editAppBtn).click();
         await newApp.waitForLoaderToDisappear();
 
@@ -1520,14 +1591,22 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
       }
 
-      // Verifying that the Edit Application button is not visible
+      // Navigating to All Applications Page
+      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
       await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
-      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='" + rejectionReason + "']/span[text()='Reason' and text()=':']")).toBeVisible();
+      await page.locator(AllApplicationLocators.editAppBtn).click();
+      await newApp.waitForLoaderToDisappear();
+      
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await newApp.attachScreenshot(testInfo, `The Edit Application option for Rejected Application with Reason is not displayed.`);
+      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
+      await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
+
+      await page.getByText("Ok").click(); 
 
 
     } catch (error) {
@@ -1547,7 +1626,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'Cannot proceed with rejected application.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);

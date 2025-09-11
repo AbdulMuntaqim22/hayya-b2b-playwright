@@ -23,7 +23,7 @@ class EventsPage extends BasePage {
     await this.page.locator(EventsLocators.addEventBtn).click();
 
     await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForTimeout(1000); // Wait for the page to load completely
+    await this.page.waitForTimeout(2000); // Wait for the page to load completely
 
     // Set event start and end dates
     const eventStart = new Date();

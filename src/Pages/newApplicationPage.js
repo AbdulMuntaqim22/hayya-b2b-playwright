@@ -455,6 +455,7 @@ class NewApplicationPage extends BasePage {
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
       await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+      await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Tab');
 
       // Uploading Passport and Profile Picture
       await this.page.locator(NewApplicationLocators.personalPhoto).setInputFiles(data.personalPhoto);

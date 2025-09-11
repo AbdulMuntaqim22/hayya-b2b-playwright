@@ -145,12 +145,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.waitForLoadState('load');
 
       await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -173,7 +174,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
     }
@@ -300,14 +301,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -329,7 +329,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -464,7 +464,9 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -486,7 +488,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -615,14 +617,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       //await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -644,7 +645,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -771,13 +772,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -799,7 +800,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -810,6 +811,8 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       // Deleting the Groups
       await adminApi.deleteGroup(visaData.orgName, groupName);
       await adminApi.deleteGroup(visaData.orgName, groupName2);
+
+      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
@@ -925,14 +928,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -955,7 +957,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -1082,14 +1084,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -1112,7 +1113,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
@@ -1241,14 +1242,13 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(AllApplicationLocators.viewDetailsBtn).click();
       await page.waitForLoadState('load');
       
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+      await page.locator(AllApplicationLocators.editAppBtn).click();      
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot proceed with rejected application.");
+      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -1270,7 +1270,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = 'A visa application draft already exists for this profile or passport. Please review your existing drafts before creating a new one.';
+      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
       await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
