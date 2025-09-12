@@ -47,7 +47,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         launchOptions: {
-          headless: false,
+          headless: true,
           args: ['--start-maximized']
         },
         viewport: {width:1920, height:1080}, // disables default viewport
