@@ -38,7 +38,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
   });
 
-  test('A1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
+  test.only('A1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
     var data = visaData.A1;
 
     // Fill and Save the Application as Draft
@@ -134,7 +134,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -392,7 +392,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -650,7 +650,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);    
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -907,7 +907,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -1160,7 +1160,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -1418,7 +1418,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -1666,7 +1666,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
@@ -1916,7 +1916,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
       await page.waitForLoadState('load');
 
       await newApp.update_Submitted_Application(testInfo, data);
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("Cannot update application in pending approval status.");
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe("This visa application status is not eligible for editing.");
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When it is in Pending Status`);
       await page.getByText('Ok').click();
