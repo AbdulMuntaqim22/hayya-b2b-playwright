@@ -38,7 +38,7 @@ test.describe('Manual Application Scenarios - Update Application', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
   });
 
-  test.only('A1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
+  test('A1: Verify that the user can update the Application when it is in Pending Payment Status and when Approved with Valid Status and Outside Qatar', async ({ page }, testInfo) => {
     var data = visaData.A1;
 
     // Fill and Save the Application as Draft
