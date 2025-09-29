@@ -150,7 +150,7 @@ test.describe('Manual Application Scenarios: Approved', () => {
 
       await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
 
-      // Updating the Payment Status
+      // Updating the Visa Permit
       const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo, visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 0, visaStartDate: "2025-07-15T21:44:58.147Z", visaEndDate: "2025-07-15T21:44:58.147Z", issueDate: "2025-07-15T21:44:58.147Z", lastEntryDate: "2025-07-15T21:44:58.147Z" });
       expect(approveAppResponse.statusCode).toBe(200);
 
