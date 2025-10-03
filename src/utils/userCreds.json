@@ -1,12 +1,12 @@
 {
     "requestorUsers": {
         "newUser": {
-            "email": "RequestorAuto01@yopmail.com",
+            "email": "RequestorAuto02@yopmail.com",
             "password": "RequestorAuto@123",
             "encryptedPassword": "Ejgit69YoDUQGLbtrE0ja96DRB3OeZlwKr0wVYGvsgV59DHDW32MekfehXR2"
         },
         "existingUser": {
-            "email": "RequestorAuto@yopmail.com",
+            "email": "RequestorAuto03@yopmail.com",
             "password": "RequestorAuto@123",
             "encryptedPassword": "nINNZY1dxqy586GYstHmKmdWOlIwfb8wrdoGlTvasZLgPr24AkrhJhWAb89i"
         }

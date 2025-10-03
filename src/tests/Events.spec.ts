@@ -31,9 +31,7 @@ test.describe('Events Page Scenarios', () => {
     b2bApi = new API(page, apiConfig.baseUrl);
     await b2bApi.init(); // Initialize the API instance
     adminApi = new API(page, apiConfig.baseUrl);
-    await adminApi.init(); // Initialize the API instance
-
-    b2bUserData = await b2bApi.GetAccessToken(credentials.requestorUsers.existingUser);
+    await adminApi.init(); // Initialize the API instance    
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
 
     // Logging in before each test    
