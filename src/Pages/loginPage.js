@@ -1,7 +1,6 @@
 import { expect, testInfo } from '@playwright/test';
 import { LoginLocators } from '../Locators/loginLocators';
 import BasePage from './basePage';
-import fs from 'fs';
 
 class LoginPage extends BasePage {
     constructor(page) {

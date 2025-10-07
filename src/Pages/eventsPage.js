@@ -58,15 +58,15 @@ class EventsPage extends BasePage {
     await this.page.getByText('Entertainment').click();
     await this.page.locator(EventsLocators.sponsoringEntityTxt).fill('Test Entity');
 
-    await this.page.locator(EventsLocators.authenticateDegreeUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await this.page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
     await this.waitForLoaderToDisappear();
-    await this.page.locator(EventsLocators.cvUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await this.page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
     await this.waitForLoaderToDisappear();
-    await this.page.locator(EventsLocators.policeClearanceCertificateUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
-    await this.waitForLoaderToDisappear();
-    await this.page.locator(EventsLocators.sectoralEndoresementUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
-    await this.waitForLoaderToDisappear();
-    await this.page.waitForTimeout(5000);
+    // await this.page.locator(EventsLocators.policeClearanceCertificateUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    // await this.waitForLoaderToDisappear();
+    // await this.page.locator(EventsLocators.sectoralEndoresementUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    // await this.waitForLoaderToDisappear();
+    // await this.page.waitForTimeout(5000);
     await this.attachScreenshot(testInfo, 'Event Details Filled', true);
     await this.page.locator(EventsLocators.nextBtn).click();
     await this.page.waitForLoadState('domcontentloaded');

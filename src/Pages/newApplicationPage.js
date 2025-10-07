@@ -28,7 +28,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -124,7 +124,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -216,7 +216,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -323,7 +323,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -427,7 +427,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -529,7 +529,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
 
     // Opening the Manual Application
-    await this.page.locator(NewApplicationLocators.manualAppBtn).click();
+    await this.page.locator(NewApplicationLocators.visaTypeSelect).click();
 
 
     // Wait for the first field of the manual application form to be visible
@@ -635,7 +635,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -743,7 +743,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -848,7 +848,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -954,7 +954,7 @@ class NewApplicationPage extends BasePage {
 
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1056,7 +1056,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1181,7 +1181,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1303,7 +1303,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1455,7 +1455,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1604,7 +1604,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1741,7 +1741,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1871,7 +1871,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.bulkUploadBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();

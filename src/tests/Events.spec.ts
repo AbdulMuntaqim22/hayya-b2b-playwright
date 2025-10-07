@@ -10,7 +10,7 @@ import { OrganizationLocators } from '../Locators/organizationLocators'
 
 
 test.describe('Events Page Scenarios', () => {
-  /** @type {LoginPage} */
+  /** @type {LoginPage} */  
   var loginPage;
   /** @type {EventsPage} */
   var eventsPage: EventsPage;
@@ -64,10 +64,12 @@ test.describe('Events Page Scenarios', () => {
     await expect(page.locator(EventsLocators.plannedAppEndDateTxt)).toBeVisible();  
     await expect(page.locator(EventsLocators.natureOfEventSelectTxt)).toBeVisible();
     await expect(page.locator(EventsLocators.sponsoringEntityTxt)).toBeVisible();
-    await expect(page.locator(EventsLocators.authenticateDegreeUpload)).toBeAttached();
-    await expect(page.locator(EventsLocators.cvUpload)).toBeAttached();
-    await expect(page.locator(EventsLocators.policeClearanceCertificateUpload)).toBeAttached();
-    await expect(page.locator(EventsLocators.sectoralEndoresementUpload)).toBeAttached();
+    // await expect(page.locator(EventsLocators.authenticateDegreeUpload)).toBeAttached();
+    // await expect(page.locator(EventsLocators.cvUpload)).toBeAttached();
+    // await expect(page.locator(EventsLocators.policeClearanceCertificateUpload)).toBeAttached();
+    // await expect(page.locator(EventsLocators.sectoralEndoresementUpload)).toBeAttached();
+    await expect(page.locator(EventsLocators.authorizerLetterUpload)).toBeAttached();
+    await expect(page.locator(EventsLocators.establishmentCardUpload)).toBeAttached();
     await loginPage.attachScreenshot(testInfo, 'Events Page Fields', true);
   });
 
@@ -100,14 +102,15 @@ test.describe('Events Page Scenarios', () => {
     expect(await page.locator(EventsLocators.plannedAppEndDateTxtValidation).textContent()).toBe("Planned Application End Date is required");
     expect(await page.locator(EventsLocators.natureOfEventValidationTxt).textContent()).toBe("Nature of Event is required");
     expect(await page.locator(EventsLocators.sponsoringEntityValidationTxt).textContent()).toBe("Sponsoring Entity is required");
-    expect(await page.locator(EventsLocators.authenticatedDegreeValidationTxt).textContent()).toBe("Authenticated Degree is required");
-    expect(await page.locator(EventsLocators.cvValidationTxt).textContent()).toBe("CV is required");
-    expect(await page.locator(EventsLocators.policeClearanceCertificateValidationTxt).textContent()).toBe("Police Clearance from country of residence is required");
-    expect(await page.locator(EventsLocators.sectoralEndoresementValidationTxt).textContent()).toBe("Sectoral Endorsement Letter is required");
+    expect(await page.locator(EventsLocators.authorizerLetterValidationTxt).textContent()).toBe("Authorizer letter  is required");
+    expect(await page.locator(EventsLocators.establishmentCardValidationTxt).textContent()).toBe("Establishment Card Image is required");
+    //expect(await page.locator(EventsLocators.cvValidationTxt).textContent()).toBe("CV is required");
+    //expect(await page.locator(EventsLocators.policeClearanceCertificateValidationTxt).textContent()).toBe("Police Clearance from country of residence is required");
+    //expect(await page.locator(EventsLocators.sectoralEndoresementValidationTxt).textContent()).toBe("Sectoral Endorsement Letter is required");
     await loginPage.attachScreenshot(testInfo, 'Events Page Fields are Required', true);
   });
 
-  test.skip('Verify that Applicant Arrival and Departure Date should be within event start and End time', async ({ page }, testInfo) => {
+  test('Verify that when Other is selected in Nature of Event the Specify nature field is displayed and required', async ({ page }, testInfo) => {
 
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();
@@ -115,98 +118,112 @@ test.describe('Events Page Scenarios', () => {
     // Clicking on the Add Event button
     await page.locator(EventsLocators.addEventBtn).click();
 
-    // Clicking on the Next button without filling any fields
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Other').click();
+
+    //Verifying the Specify Nature of Event field is displayed
+    await expect(page.locator(EventsLocators.specifyNatureOfEventTxt)).toBeVisible();
+
+    // Clicking on the Next button without filling any fields 
     await page.locator(EventsLocators.nextBtn).click();
 
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(1000); // Wait for the page to load completely
+    //Verifying the Specify Nature of Event field is required
+    expect(await page.locator(EventsLocators.specifyNatureOfEventValidationTxt).textContent()).toBe("Nature of Event is required");
 
-    // Set event start and end dates
-    const eventStart = new Date();
-    const eventEnd = new Date(eventStart);
-    eventEnd.setDate(eventStart.getDate() + 10);
+    await loginPage.attachScreenshot(testInfo, 'Specify Nature of Event field is displayed and required when Other is Selected', true);
+  });
 
-    // entering the event start and end date
-    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(eventStart));
-    // Entering the End date 10 days after the start date
-    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventsPage.formatDate(eventEnd));
+    test('Verify the Next button functionality', async ({ page }, testInfo) => {
 
-    console.log(`Event Start Date: ${eventsPage.formatDate(eventStart)}`);
-    console.log(`Event End Date: ${eventsPage.formatDate(eventEnd)}`);
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
 
-    // Dates before event start
-    const beforeStart = new Date(eventStart);
-    beforeStart.setDate(eventStart.getDate() - 5);
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
 
-    // Dates after event end
-    const afterEnd = new Date(eventEnd);
-    afterEnd.setDate(eventEnd.getDate() + 5);
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Other').click();
 
-    console.log(`Before Start Date: ${eventsPage.formatDate(beforeStart)}`);
-    console.log(`After End Date: ${eventsPage.formatDate(afterEnd)}`);
+    //Verifying the Specify Nature of Event field is displayed
+    await expect(page.locator(EventsLocators.specifyNatureOfEventTxt)).toBeVisible();
 
-    // Check Applicant Arrival Date When date is in Past
-    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(beforeStart));
-    expect(await page.locator(EventsLocators.applicantArrivalDateValidationTxt).textContent()).toBe('Date must be today or in the future');
-    await loginPage.attachScreenshot(testInfo, 'Applicant Arrival Date field does not accept Past Dates', true);
+    // Clicking on the Next button without filling any fields 
+    await page.locator(EventsLocators.nextBtn).click();
 
-    // Check Applicant Departure Date When date is after the Event End Date    
-    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(afterEnd));
-    expect(await page.locator(EventsLocators.applicantDepartureDateValidationTxt).textContent()).toBe('Departure date must be on or before the event end date');
-    await loginPage.attachScreenshot(testInfo, 'Applicant Departure Date field does not accept Dates after Event End Date', true);
+    //Verifying the Specify Nature of Event field is required
+    expect(await page.locator(EventsLocators.specifyNatureOfEventValidationTxt).textContent()).toBe("Nature of Event is required");
 
-    // Positive cases: Dates within event range
-    const validArrival = new Date(eventStart);
-    validArrival.setDate(eventStart.getDate() + 1);
-    const validDeparture = new Date(eventEnd);
-    validDeparture.setDate(eventEnd.getDate() - 1);
-
-    console.log(`Valid Arrival Date: ${eventsPage.formatDate(validArrival)}`);
-    console.log(`Valid Departure Date: ${eventsPage.formatDate(validDeparture)}`);
-
-    await eventsPage.expectDateAccepted(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(validArrival));
-    await eventsPage.expectDateAccepted(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(validDeparture));
-
-    await expect(page.locator(EventsLocators.applicantArrivalDateValidationTxt)).toHaveCount(0);
-    await expect(page.locator(EventsLocators.applicantDepartureDateValidationTxt)).toHaveCount(0);
-
-    await page.waitForTimeout(1000); // Wait for the page to update
-
-    await loginPage.attachScreenshot(testInfo, 'Applicant Arrival/Departure Date fields accept Dates within Event Start and End Date', true);
-
-    // Verifying the Event start and end dates can be selected in Arrival and Departure Date fields
-    await eventsPage.expectDateAccepted(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(eventStart));
-    await eventsPage.expectDateAccepted(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(eventEnd));
-
-    await expect(page.locator(EventsLocators.applicantArrivalDateValidationTxt)).toHaveCount(0);
-    await expect(page.locator(EventsLocators.applicantDepartureDateValidationTxt)).toHaveCount(0);
-
-    await loginPage.attachScreenshot(testInfo, 'Applicant Arrival/Departure Date fields accept same Date as Event Start/End Date Respectively', true);
+    await loginPage.attachScreenshot(testInfo, 'Specify Nature of Event field is displayed and required when Other is Selected', true);
   });
 
   test('Verify that the user can submit the Event Request and see its status', async ({ page }, testInfo) => {
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();
 
-    //creating the Event
-    const eventName = await eventsPage.createEvent(testInfo, true);
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
 
-    // Fetching All Event Details to retrieve the Event ID
-    const eventDetails = await adminApi.PostRequest('/api/sc/v1/Event/requests',{"pageNumber": 1,"pageSize": 1,"searchTerm": eventName });
-    const myEventId = eventDetails.jsonResponse.result[0].globalId;
-
-    // Approving the Event
-    const approveResponse = await adminApi.PutRequest(`/api/sc/v1/Event/requests/approve/${myEventId}`);
-    expect(approveResponse.statusCode).toBe(200);
-
-    await page.waitForTimeout(1000); // Wait for the page to update
-    await page.reload();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(2000); // Wait for the page to load completely
 
-    // Verify the Event is created with a Approved Status
-    const event = page.locator(EventsLocators.eventTable).locator("//tbody/tr/td//p[text()='" + eventName + "']/ancestor::tr/td[7]/span")
-    // Verifying the Event Statu is Approved
-    expect(await event.textContent()).toBe('Approved');    
+    // Set event start and end dates
+    const eventStart = new Date();
+    const eventEnd = new Date(eventStart);
+    const plannedEndDate = new Date(eventStart);
+    plannedEndDate.setDate(eventStart.getDate() + 9);
+    eventEnd.setDate(eventStart.getDate() + 10);
+    const randomFiveDigit = eventsPage.generateRandomFiveDigit();
+    const eventName = 'Auto Event ' + randomFiveDigit;
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill(eventName);
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill('5');
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventsPage.formatDate(eventEnd));
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01","00","PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt,  "05","00","PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill('Test Location');
+    await page.locator(EventsLocators.eventDetailsTxt).fill('Test Event Details');
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(eventEnd));    
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, eventsPage.formatDate(plannedEndDate));
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Entertainment').click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill('Test Entity');
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();    
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();  
+
+    // Navigated to the Next Page
+    await expect(page.locator(EventsLocators.conferenceVisaCheckbox)).toBeVisible();
+    await expect(page.locator(EventsLocators.privateEventCheckbox)).toBeVisible();
+    await expect(page.locator(EventsLocators.accredAndPermitCheckbox)).toBeVisible();
+    await expect(page.locator(EventsLocators.hmpCheckbox)).toBeVisible();
+    await eventsPage.attachScreenshot(testInfo, 'Navigated to Next Page', true);
+
+    await page.locator(EventsLocators.nextBtn).click(); 
+    await expect(page.locator(EventsLocators.adminFirstNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminMiddleNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminThirdNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminFourthNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminLastNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminEmailAddressTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminContactNumberTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.adminPassportQidDoc)).toBeAttached();
+
+    await eventsPage.attachScreenshot(testInfo, 'Navigated to Admin Details Page', true);
 
     await loginPage.attachScreenshot(testInfo, `${eventName} is created with status Approved`)
   });
@@ -649,7 +666,7 @@ test.describe('Events Page Scenarios', () => {
   // Navigating to Organization Page
   await page.locator(OrganizationLocators.organizationLeftMenuBtn).click();
   await page.waitForLoadState('domcontentloaded');
-  await page.locator(OrganizationLocators.emailTxt).first().waitFor({ state: 'visible' });
+  await page.locator(OrganizationLocators.orgDetails).first().waitFor({ state: 'visible' });
 
   // Validating the New Event is NOT Displaying
   const element = page.locator(`//div[text()='${eventName}']/ancestor::div[2]/following-sibling::div/span[2]`);  

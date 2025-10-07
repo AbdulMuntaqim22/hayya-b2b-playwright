@@ -58,7 +58,7 @@ test.describe('Arabic Fields', () => {
 
 
     // Wait for the first field of the manual application form to be visible
-    await page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+    await page.waitForSelector(NewApplicationLocators.visaCategorySelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await page.locator(NewApplicationLocators.visaCategorySelect).click();
