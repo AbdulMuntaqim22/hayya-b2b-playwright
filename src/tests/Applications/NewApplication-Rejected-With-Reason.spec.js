@@ -180,14 +180,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
         await expect(row).toBeVisible();
 
         await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
-      }
-
-      // // Verifying that the Edit Application button is not visible
-      // await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      // await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      // await page.waitForLoadState('load');
-      // await expect(page.locator("//h3[text()='Application Rejected']/following-sibling::p[text()='"+rejectionReason+"']/span[text()='Reason' and text()=':']")).toBeVisible();
-      // await expect(page.locator(AllApplicationLocators.editAppBtn)).not.toBeAttached();
+      }      
 
       // Navigating to All Applications Page
       await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
@@ -201,7 +194,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.otherNationalityNoOption).check();
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
       
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -408,7 +401,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -441,16 +434,15 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
     // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
+    await adminApi.deleteGroup(visaData.orgName, groupName);   
+    await adminApi.deleteGroup(visaData.orgName, groupName2);    
 
   });
 
@@ -609,7 +601,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.keyboard.press("Enter");
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -642,8 +634,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
@@ -807,7 +798,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.keyboard.press("Enter");
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -840,8 +831,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
@@ -1005,7 +995,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();      
       
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -1038,8 +1028,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
@@ -1204,7 +1193,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -1237,8 +1226,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
@@ -1403,7 +1391,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -1436,8 +1424,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 
@@ -1602,7 +1589,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({months:1});
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
       expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Maximum update limit reached. Try again after ${oneMonthLater.day}-${oneMonthLater.monthStr}-${oneMonthLater.year}.`);
       await newApp.attachScreenshot(testInfo, `The Re-Submitting for the 5th Time it will throw the Error.`);
 
@@ -1635,8 +1622,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
       // Deleting the Profile
       await adminApi.deleteCompleteProfile(groupName);
       // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
+      await adminApi.deleteGroup(visaData.orgName, groupName);      
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }
 

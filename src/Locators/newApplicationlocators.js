@@ -16,7 +16,7 @@ export const NewApplicationLocators = {
     passportImage: "//label[text()='Passport Image']/following-sibling::div/input",
     passportNumTxt: "//label[text()='Passport Number']/following-sibling::input",
     emailTxt: "//label[text()='Email']/following-sibling::input",
-    purposeofVisitSelect: "//label[text()='Purpose of Visit']/following-sibling::div//input",    
+    visitTypeSelect: "//label[text()='Visit Type']/following-sibling::div//input",    
     passportTypeSelect: "//label[text()='Passport Type']/following-sibling::div//input",
     expDateTxt: "//label[text()='Exp Date']/following-sibling::div//input",
     issueDateTxt: "//label[text()='Issue Date']/following-sibling::div//input",
@@ -27,9 +27,13 @@ export const NewApplicationLocators = {
     nationalitySelect: "//label[text()='Nationality']/following-sibling::div//input",
     countryOfBirthSelect: "//label[text()='Country of Birth']/following-sibling::div//input",
     countryOfResidenceSelect: "//label[text()='Country of Residency']/following-sibling::div//input",
+    gccCountryOfResidenceSelect: "//label[text()='GCC Country of Residency']/following-sibling::div//input",
+    otherNationalityCountrySelect: "//label[text()='Other Nationality']/following-sibling::div//input",
     otherNationalitySelect: "//label[text()='Do you have previous/other nationality?']/following-sibling::div//input",
     otherNationalityYesOption: "//label/span[text()='Yes']/preceding-sibling::div/input",
     otherNationalityNoOption: "//label/span[text()='No']/preceding-sibling::div/input",
+    residencyTypeCheckbox: "//span[text()='Residency']/preceding-sibling::div//input[@name='selecttype']",
+    visaTypeA3Checkbox: "//span[text()='Visa']/preceding-sibling::div//input[@name='selecttype']",
 
     previousOtherCitizenshipSelect: "//label[text()='Previous/Other Citizenship']/following-sibling::div//input",
 
@@ -64,8 +68,8 @@ export const NewApplicationLocators = {
     saveAsDraftBtn: "//button[text()='Save As Draft']",
     continueBtn: "//button[text()='Continue']",
 
-    schengenFrontDoc: "//label[text()='Schengen Document']/following-sibling::div//input",
-    schengenBackDoc: "//label[text()='Upload Back Side']/following-sibling::div//input",
+    frontSideDoc: "//label[text()='Upload Front Side']/following-sibling::div//input",
+    backSideDoc: "//label[text()='Upload Back Side']/following-sibling::div//input",
     candidateApprovalDoc: "//label[text()='Candidate Approval']/following-sibling::div//input",
     policeClearanceDoc: "//label[text()='Police Clearance from country of residence']/following-sibling::div//input",
     degreeDoc: "//label[text()='Authenticated Degree']/following-sibling::div//input",

@@ -61,12 +61,7 @@ class EventsPage extends BasePage {
     await this.page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
     await this.waitForLoaderToDisappear();
     await this.page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
-    await this.waitForLoaderToDisappear();
-    // await this.page.locator(EventsLocators.policeClearanceCertificateUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
-    // await this.waitForLoaderToDisappear();
-    // await this.page.locator(EventsLocators.sectoralEndoresementUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
-    // await this.waitForLoaderToDisappear();
-    // await this.page.waitForTimeout(5000);
+    await this.waitForLoaderToDisappear();    
     await this.attachScreenshot(testInfo, 'Event Details Filled', true);
     await this.page.locator(EventsLocators.nextBtn).click();
     await this.page.waitForLoadState('domcontentloaded');

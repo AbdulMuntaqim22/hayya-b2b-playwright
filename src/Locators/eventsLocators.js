@@ -46,7 +46,8 @@ export const EventsLocators = {
     hmpCheckbox: "//span[text()='Hayya Media Portal']/ancestor::label//input",
     accredAndPermitCheckbox: "//span[text()='Accreditation and Permits']/ancestor::label//input",
 
-    peakAppSubmissionPeriodTxt: "//label[text()='Expected Peak Period of Application Submission *']/following-sibling::div/input",
+    peakAppSubmissionPeriodTxt: "//label[contains(text(),'Expected Peak Period of Application Submission')]/following-sibling::div/input",
+    peakAppSubmissionPeriodTxtValidation: "//label[contains(text(),'Expected Peak Period of Application Submission')]/following-sibling::p",
     plannedAppStartDateTxt: "//label[contains(text(),'Planned Application Start Date')]/following-sibling::div/input",
     plannedAppStartDateTxtValdiation: "//label[contains(text(),'Planned Application Start Date')]/parent::div/p",
     plannedAppEndDateTxt: "//label[contains(text(),'Planned Application End Date')]/following-sibling::div/input",
@@ -69,13 +70,15 @@ export const EventsLocators = {
     adminPassportQidTxt: "//label[contains(text(),'Passport/QID Number')]/following-sibling::div/input",
     adminPassportQidDoc: "//label[contains(text(),'Passport Document')]/following-sibling::div//input[@type='file']",
     adminEmailAddressTxt: "//label[contains(text(),'Email Address')]/following-sibling::div/input",
+    adminEmailAddressTxtValidation: "//label[contains(text(),'Email Address')]/following-sibling::p",
     adminContactNumberTxt: "//label[contains(text(),'Contact Number')]/following-sibling::div/input",
+    selectedFlag: "//div[@class='selected-flag' and contains(@title, '[X]')]",
 
     submitApplicationBtn: "//button[text()='Submit Application']",
     continueBtn: "//button[text()='Continue']",
-    eventTable: "//table"
+    eventTable: "//table",
 
-
+    
 
 
 

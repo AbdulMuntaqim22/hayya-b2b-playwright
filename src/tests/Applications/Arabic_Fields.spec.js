@@ -80,8 +80,8 @@ test.describe('Arabic Fields', () => {
 
     try {
       // Selecting Purpose of Visit 
-      await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);

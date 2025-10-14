@@ -50,8 +50,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -73,6 +73,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Selecting Country of Birth
       await this.page.locator(NewApplicationLocators.countryOfBirthSelect).fill(data.country);
       await this.page.locator(NewApplicationLocators.countryOfBirthSelect).press('Enter');
@@ -84,6 +92,8 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
@@ -146,8 +156,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -169,6 +179,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Selecting Country of Birth
       await this.page.locator(NewApplicationLocators.countryOfBirthSelect).fill(data.country);
       await this.page.locator(NewApplicationLocators.countryOfBirthSelect).press('Enter');
@@ -180,6 +198,8 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
@@ -239,8 +259,8 @@ class NewApplicationPage extends BasePage {
     try {
 
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -266,22 +286,33 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);      
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
 
       // Selecting Country of Residence
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
-      await this.page.keyboard.press('Enter')
+      await this.page.locator(NewApplicationLocators.gccCountryOfResidenceSelect).fill(data.countryOfResidence);
+      await this.page.keyboard.press('Enter');
 
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
@@ -346,8 +377,8 @@ class NewApplicationPage extends BasePage {
     try {
 
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -373,22 +404,33 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);        
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
 
       // Selecting Country of Residence
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
-      await this.page.keyboard.press('Enter')
+      await this.page.locator(NewApplicationLocators.gccCountryOfResidenceSelect).fill(data.countryOfResidence);
+      await this.page.keyboard.press('Enter');
 
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
@@ -449,8 +491,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -473,18 +515,29 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');        
+      }      
 
-      // Leaving Space for Citizenship field
-      //###
+      // Selecting Type
+      await this.page.locator(NewApplicationLocators.visaTypeA3Checkbox).check();
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -498,10 +551,10 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
 
       // Uploading Schengen Documents
-      await this.page.locator(NewApplicationLocators.schengenFrontDoc).setInputFiles(data.schengenFront);
-      await this.page.locator(NewApplicationLocators.schengenFrontDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
-      await this.page.locator(NewApplicationLocators.schengenBackDoc).setInputFiles(data.schengenBack);
-      await this.page.locator(NewApplicationLocators.schengenBackDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await this.page.locator(NewApplicationLocators.frontSideDoc).setInputFiles(data.schengenFront);
+      await this.page.locator(NewApplicationLocators.frontSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await this.page.locator(NewApplicationLocators.backSideDoc).setInputFiles(data.schengenBack);
+      await this.page.locator(NewApplicationLocators.backSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
       // Clicking on Save as Draft button    
@@ -527,10 +580,9 @@ class NewApplicationPage extends BasePage {
     var groupName = "Group " + this.generateRandomFiveDigit();
     // Navigating to New Application Page
     await this.page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
-
+    
     // Opening the Manual Application
-    await this.page.locator(NewApplicationLocators.visaTypeSelect).click();
-
+    await this.page.locator(NewApplicationLocators.manualAppBtn).click();    
 
     // Wait for the first field of the manual application form to be visible
     await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
@@ -555,8 +607,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -578,18 +630,29 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }          
 
-      // Leaving Space for Citizenship field
-      //###
+      // Selecting Type
+      await this.page.locator(NewApplicationLocators.visaTypeA3Checkbox).check();
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -603,10 +666,10 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
 
       // Uploading Schengen Documents
-      await this.page.locator(NewApplicationLocators.schengenFrontDoc).setInputFiles(data.schengenFront);
-      await this.page.locator(NewApplicationLocators.schengenFrontDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
-      await this.page.locator(NewApplicationLocators.schengenBackDoc).setInputFiles(data.schengenBack);
-      await this.page.locator(NewApplicationLocators.schengenBackDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await this.page.locator(NewApplicationLocators.frontSideDoc).setInputFiles(data.schengenFront);
+      await this.page.locator(NewApplicationLocators.frontSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await this.page.locator(NewApplicationLocators.backSideDoc).setInputFiles(data.schengenBack);
+      await this.page.locator(NewApplicationLocators.backSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
     }
@@ -657,8 +720,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -684,6 +747,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
@@ -699,8 +770,8 @@ class NewApplicationPage extends BasePage {
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
 
-      // Selecting Country of Residence
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
+      // Selecting GCC Country of Residence
+      await this.page.locator(NewApplicationLocators.gccCountryOfResidenceSelect).fill(data.countryOfResidence);
       await this.page.keyboard.press('Enter')
 
       // Entering Contact and Emergency Contact number
@@ -765,8 +836,8 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -792,6 +863,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
@@ -807,8 +886,8 @@ class NewApplicationPage extends BasePage {
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
 
-      // Selecting Country of Residence
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
+      // Selecting GCC Country of Residence
+      await this.page.locator(NewApplicationLocators.gccCountryOfResidenceSelect).fill(data.countryOfResidence);
       await this.page.keyboard.press('Enter')
 
       // Entering Contact and Emergency Contact number
@@ -870,16 +949,16 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
       await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
 
       // Selecting Job Title
-      await this.page.locator(NewApplicationLocators.jobTitleSelect).fill(data.jobTitle);
-      await this.page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
+      //await this.page.locator(NewApplicationLocators.jobTitleSelect).fill(data.jobTitle);
+      //await this.page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
 
       // Uploading Passport and Profile Picture
       await this.page.locator(NewApplicationLocators.personalPhoto).setInputFiles(data.personalPhoto);
@@ -897,24 +976,26 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalityYesOption).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
-      }
-      else {
-        await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
-      }
-      await this.page.keyboard.press('Enter');
-
-      if (data.otherNationality) {
         // Selecting Other Country
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).fill(data.otherCountry);
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).press('Enter');
       }
-
-      // Filling Exp Data field
-      await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
+      else {
+        await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+      }      
+            
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -976,16 +1057,16 @@ class NewApplicationPage extends BasePage {
 
     try {
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
       await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
 
       // Selecting Job Title
-      await this.page.locator(NewApplicationLocators.jobTitleSelect).fill(data.jobTitle);
-      await this.page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
+      //await this.page.locator(NewApplicationLocators.jobTitleSelect).fill(data.jobTitle);
+      //await this.page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
 
       // Uploading Passport and Profile Picture
       await this.page.locator(NewApplicationLocators.personalPhoto).setInputFiles(data.personalPhoto);
@@ -1003,10 +1084,21 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       await this.page.locator(NewApplicationLocators.otherNationalityYesOption).waitFor({ state: "visible" });
       // Selecting Yes for Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
+        // Selecting Other Country
+        await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).fill(data.otherCountry);
+        await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
@@ -1017,10 +1109,7 @@ class NewApplicationPage extends BasePage {
         // Selecting Other Country
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).fill(data.otherCountry);
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).press('Enter');
-      }
-
-      // Filling Exp Data field
-      await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
+      }      
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -1113,6 +1202,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1131,11 +1228,16 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
+
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
+        await this.page.keyboard.press('Enter');
       }
-      await this.page.keyboard.press('Enter');
+      
 
       // Selecting Marital Status
       await this.page.locator(NewApplicationLocators.maritalStatusSelect).fill(data.maritalStatus);
@@ -1152,10 +1254,16 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
 
+
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
+
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
       // Clicking on Save as Draft button    
       await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
       await this.page.locator(NewApplicationLocators.continueBtn).click();
+
+      
+
     }
     catch (error) {
 
@@ -1238,6 +1346,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1256,11 +1372,14 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Selecting Marital Status
       await this.page.locator(NewApplicationLocators.maritalStatusSelect).fill(data.maritalStatus);
@@ -1272,6 +1391,8 @@ class NewApplicationPage extends BasePage {
       // uploading Candidate Approval Doc
       await this.page.locator(NewApplicationLocators.candidateApprovalDoc).setInputFiles(data.candidateApprovalDoc);
       await this.page.locator(NewApplicationLocators.candidateApprovalDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
 
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
@@ -1340,8 +1461,8 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      //await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      //await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -1363,6 +1484,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1377,11 +1506,14 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1426,6 +1558,8 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
 
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
+
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
       // Clicking on Save as Draft button    
       await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
@@ -1455,7 +1589,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1492,8 +1626,8 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      // await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      // await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -1515,6 +1649,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1529,11 +1671,14 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1573,10 +1718,12 @@ class NewApplicationPage extends BasePage {
       // Uploading Job Contract or Offer letter from Hiring entity
       await this.page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(data.offerLetterDoc);
       await this.page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
-
+      
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
+
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
 
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
 
@@ -1643,8 +1790,8 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
       // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      //await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      //await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -1666,6 +1813,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1680,11 +1835,14 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1714,6 +1872,9 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
 
       await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
+
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
+
       // Clicking on Save as Draft button    
       await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
       await this.page.locator(NewApplicationLocators.continueBtn).click();
@@ -1741,7 +1902,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
@@ -1779,9 +1940,9 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.occupationTypeSelect).fill(data.occupationType);
       await this.page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
-      // Selecting Purpose of Visit 
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.purposeOfVisit);
-      await this.page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+      // // Selecting Purpose of Visit 
+      // await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
+      // await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
       // Selecting Passport Type
       await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
@@ -1803,6 +1964,14 @@ class NewApplicationPage extends BasePage {
         NewApplicationLocators.passportNumTxt
       );
 
+      // Entering Arabic Names
+      if(data.arabicFirstName){
+        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
+      }
+      if(data.arabicLastName){
+        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+      }
+
       // Setting Issue Date
       await this.fillDatePicker(NewApplicationLocators.issueDateTxt, '16/07/2025');
 
@@ -1817,11 +1986,14 @@ class NewApplicationPage extends BasePage {
       // Selecting Previous/Other Nationality Question
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await this.page.keyboard.press('Enter');
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherCountry);
+        await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-      }
-      await this.page.keyboard.press('Enter');
+        await this.page.keyboard.press('Enter');
+      }      
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1846,6 +2018,8 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(data.bankStatementDoc);
       await this.page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
+      await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
+      
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);

@@ -90,8 +90,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
 
         // Selecting Purpose of Visit 
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.A1.purposeOfVisit);
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter');
+        await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A1.purposeOfVisit);
+        await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
 
         // Selecting Passport Type
         await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A1.passportType);
@@ -279,8 +279,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
 
         // Selecting Purpose of Visit 
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.A2.purposeOfVisit);
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter');
+        await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A2.purposeOfVisit);
+        await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
 
         // Selecting Passport Type
         await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A2.passportType);
@@ -479,8 +479,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();        
 
         // Selecting Purpose of Visit 
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.A3.purposeOfVisit);
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter');
+        await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A3.purposeOfVisit);
+        await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
 
         // Selecting Passport Type
         await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A3.passportType);
@@ -902,8 +902,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
         // Selecting Purpose of Visit 
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.D2.purposeOfVisit);
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+        await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.D2.purposeOfVisit);
+        await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
         // Selecting Passport Type
         await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.D2.passportType);
@@ -1141,8 +1141,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
         // Selecting Purpose of Visit 
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).fill(data.D3.purposeOfVisit);
-        await page.locator(NewApplicationLocators.purposeofVisitSelect).press('Enter')
+        await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.D3.purposeOfVisit);
+        await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
 
         // Selecting Passport Type
         await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.D3.passportType);

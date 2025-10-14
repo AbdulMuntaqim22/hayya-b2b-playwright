@@ -4,7 +4,31 @@ class BasePage {
   constructor(page) {
     this.page = page;
   }
-  formatDate = (date) => date.toLocaleDateString('en-GB');
+  formatDate(date, format) {
+  if (!(date instanceof Date) || isNaN(date)) {
+    throw new Error("Invalid date object");
+  }
+
+  // Default format using your existing logic
+  if (!format) {
+    return date.toLocaleDateString('en-GB');
+  }
+
+  const map = {
+    dd: String(date.getDate()).padStart(2, '0'),
+    MM: String(date.getMonth() + 1).padStart(2, '0'),
+    yyyy: date.getFullYear(),
+    yy: String(date.getFullYear()).slice(-2),
+    HH: String(date.getHours()).padStart(2, '0'),
+    mm: String(date.getMinutes()).padStart(2, '0'),
+    ss: String(date.getSeconds()).padStart(2, '0'),
+    MMM: date.toLocaleString('en-GB', { month: 'short' }),
+    MMMM: date.toLocaleString('en-GB', { month: 'long' }),
+  };
+
+  return format.replace(/dd|MM|yyyy|yy|HH|mm|ss|MMM|MMMM/g, (match) => map[match]);
+}
+
 
   generateRandomFiveDigit() {
     return Math.floor(10000 + Math.random() * 90000).toString();
@@ -101,7 +125,7 @@ class BasePage {
       ));
 
       // Shift to Qatar timezone (UTC+3)
-      futureDate.setHours(futureDate.getHours() - 2);
+      futureDate.setHours(futureDate.getHours() - 3);
 
       var day = futureDate.getUTCDate().toString().padStart(2, '0');
       var month = futureDate.toLocaleString('default', { month: 'short' }).slice(0, 3);
