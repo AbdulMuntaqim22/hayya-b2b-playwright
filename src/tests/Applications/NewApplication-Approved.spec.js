@@ -9,14 +9,11 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe('Manual Application Scenarios: Approved', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe('Manual Application Scenarios: Approved', () => {  
+  var loginPage;  
   var newApp;
   let credentials;
-  let apiConfig;
-  /** @type {API} */
+  let apiConfig;  
   let adminApi;
   let adminUserData;
   let visaData;

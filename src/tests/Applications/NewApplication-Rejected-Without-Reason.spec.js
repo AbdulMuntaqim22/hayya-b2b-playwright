@@ -9,15 +9,12 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe('Manual Application Scenarios - Rejected Without Reason', () => {  
+  var loginPage;  
   var newApp;
   let credentials;
   let apiConfig;
-  let adminUserData;
-  /** @type {API} */
+  let adminUserData;  
   let adminApi;
   let visaData;
   test.beforeEach(async ({ page }, testInfo) => {
@@ -149,9 +146,9 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
+      var oneDayLater = newApp.getDateJsonObject({days:1});
       
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
+      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
       await page.waitForTimeout(1000);
       await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
@@ -172,6 +169,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
       var groupName2 = await newApp.fill_Tourist_A1_Aplication(testInfo, data, visaData.orgName);
       // Clicking on Save as Draft button    
       await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+      var oneMonthLater = newApp.getDateJsonObject({days:30});
 
       //Error Message is Displayed When Saving the Rejected Application as Draft
       var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;

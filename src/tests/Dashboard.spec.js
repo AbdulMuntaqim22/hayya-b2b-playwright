@@ -9,15 +9,12 @@ import { EventsLocators } from '../Locators/eventsLocators'
 import { OrganizationLocators } from '../Locators/organizationLocators'
 
 
-test.describe('Dashboard Page Scenarios', () => {
-  /** @type {LoginPage} */
+test.describe('Dashboard Page Scenarios', () => {  
   var loginPage;
-  var dashPage: DashboardPage;
-  /** @type {EventsPage} */
-  var eventsPage: EventsPage;
+  var dashPage;  
+  var eventsPage;
   let credentials;
-  let apiConfig;
-  /** @type {API} */
+  let apiConfig;  
   let adminApi;
   let adminUserData;
   test.beforeEach(async ({ page }, testInfo) => {

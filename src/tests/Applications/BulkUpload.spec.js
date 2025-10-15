@@ -9,14 +9,11 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe('Bulk Upload Application Scenarios', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe.only('Bulk Upload Application Scenarios', () => {  
+  var loginPage;  
   var newApp;
   let credentials;
-  let apiConfig;
-  /** @type {API} */
+  let apiConfig;  
   let adminApi;
   let adminUserData;
   let visaData;
@@ -136,10 +133,10 @@ test.describe('Bulk Upload Application Scenarios', () => {
     }
     catch (error) {
       // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+      //await adminApi.deleteAllDraftApps(visaData.orgName);
 
       // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+      //await adminApi.deleteGroup(visaData.orgName, groupName)
 
       throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
     }

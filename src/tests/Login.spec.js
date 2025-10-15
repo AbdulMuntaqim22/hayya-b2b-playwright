@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
 const fs = require('fs');
-const LoginPage = require('../Pages/loginPage').default;
+const LoginPage = require('../Pages/loginPage');
 const { LoginLocators } = require('../Locators/loginLocators');
 
-test.describe('Login Scenarios', () => {
-  /** @type {LoginPage} */
+test.describe('Login Scenarios', () => {  
   var loginPage;
   let credentials;
   test.beforeEach(async ({ page }) => {

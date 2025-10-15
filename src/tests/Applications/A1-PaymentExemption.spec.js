@@ -10,14 +10,11 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 const exemptedCountries = JSON.parse(fs.readFileSync('./src/Resources/A1-Payment_Exempted_Countries.json', 'utf-8'));
 
-test.describe('Tourist A1 Visa Payment Exempted Countries', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe('Tourist A1 Visa Payment Exempted Countries', () => {  
+  var loginPage;  
   var newApp;
   let credentials;  
-  let apiConfig;
-  /** @type {API} */
+  let apiConfig;  
   let adminApi;
   let adminUserData;
   let visaData;

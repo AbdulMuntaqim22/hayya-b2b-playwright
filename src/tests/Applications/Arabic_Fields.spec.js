@@ -8,10 +8,8 @@ const { NewApplicationLocators } = require('../../Locators/newApplicationlocator
 
 const exemptedCountries = JSON.parse(fs.readFileSync('./src/Resources/Arabic_Fields_Countries.json', 'utf-8'));
 
-test.describe('Arabic Fields', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe('Arabic Fields', () => {  
+  var loginPage;  
   var newApp;
   let credentials;  
   let apiConfig;

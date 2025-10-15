@@ -9,15 +9,12 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe('Manual Application Scenarios - Update Application', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {NewApplicationPage} */
+test.describe('Manual Application Scenarios - Update Application', () => {  
+  var loginPage;  
   var newApp;
   let credentials;
   let apiConfig;
-  let adminUserData;
-  /** @type {API} */
+  let adminUserData;  
   let adminApi;
   let visaData;
   test.beforeEach(async ({ page }, testInfo) => {

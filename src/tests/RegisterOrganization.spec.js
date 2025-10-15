@@ -1,14 +1,11 @@
-// @ts-check
 import { test, expect } from '@playwright/test';
 const fs = require('fs');
 import LoginPage from '../Pages/loginPage';
 import RegisterOrganizationPage from '../Pages/registerOrganizationPage';
 const { RegisterOrganizationLocators } = require('../Locators/registerOrganizationLocators');
 
-test.describe('Register Organization Form Scenarios', () => {
-  /** @type {LoginPage} */
-  var loginPage;
-  /** @type {RegisterOrganizationPage} */
+test.describe('Register Organization Form Scenarios', () => {  
+  var loginPage;  
   var regOrg;
   let credentials;
   test.beforeEach(async ({ page },testInfo) => {

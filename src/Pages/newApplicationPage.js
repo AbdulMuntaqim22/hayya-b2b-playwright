@@ -2045,7 +2045,7 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.bulkUploadBtn).click();
 
     // Wait for the first field of the manual application form to be visible
-    await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
 
     //Selecting the Visa Category
     await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
