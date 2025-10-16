@@ -9,7 +9,7 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' }); 
 
-test.describe.only('Bulk Upload Application Scenarios', () => {  
+test.describe('Bulk Upload Application Scenarios', () => {  
   var loginPage;  
   var newApp;
   let credentials;

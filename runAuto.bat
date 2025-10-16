@@ -60,7 +60,7 @@ REM 5 Executing New Applications Rejected With Reason
 call npx playwright test src/tests/Applications/NewApplication-Rejected-With-Reason --workers=1
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\Rejected_With_Reasons"
 mkdir "%report_dest%"
 REM Move report folder
@@ -73,7 +73,7 @@ REM 6 Executing New Applications Rejected Without Reason
 call npx playwright test src/tests/Applications/NewApplication-Rejected-Without-Reason --workers=1
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\Rejected_Without_Reasons"
 mkdir "%report_dest%"
 REM Move report folder
@@ -86,7 +86,7 @@ REM 7 Executing New Applications Update Status
 call npx playwright test src/tests/Applications/NewApplication-Update-Status --workers=1
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\UpdateStatus"
 mkdir "%report_dest%"
 REM Move report folder
