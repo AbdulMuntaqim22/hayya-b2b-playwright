@@ -8,7 +8,7 @@ REM 1 Executing Dashboard Events and Register Org
 call npx playwright test src/tests/RegisterOrganization src/tests/Events src/tests/Dashboard --workers=3
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\Dash_Even_RegisterOrg"
 mkdir "%report_dest%"
 REM Move report folder
@@ -21,7 +21,7 @@ REM 2 Executing Payment Exemption and Arabic Field Scenarios
 call npx playwright test src/tests/Applications/A1-PaymentExemption src/tests/Applications/Arabic_Fields --workers=2
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\A1_PaymentExemption_ArabicFields"
 mkdir "%report_dest%"
 REM Move report folder
@@ -34,7 +34,7 @@ REM 3 Executing Bulk upload
 call npx playwright test src/tests/Applications/BulkUpload --workers=1
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\Bulk_Upload"
 mkdir "%report_dest%"
 REM Move report folder
@@ -47,7 +47,7 @@ REM 4 Executing New Applications Approved
 call npx playwright test src/tests/Applications/NewApplication-Approved --workers=1
 
 REM Define source and destination
-set "report_src=%cd%\playwright-report"
+set "report_src=%cd%\B2B-playwright-report"
 set "report_dest=C:\PlaywrightReports\Approved_Application"
 mkdir "%report_dest%"
 REM Move report folder
