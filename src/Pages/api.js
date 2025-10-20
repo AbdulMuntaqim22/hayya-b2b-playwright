@@ -1,6 +1,6 @@
 import { request, expect } from '@playwright/test';
 
-export class API {
+class API {
   constructor(page,baseURL) {    
     this.page = page;
     this.baseURL = baseURL;
@@ -135,7 +135,7 @@ async GetAccessToken(credentials) {
     expect(delGroup.statusCode).toBe(200);
   }
 
-    async deleteAllGroups(){
+  async deleteAllGroups(){
     // Fetching All Organizations
     const orgs = await this.GetRequest(`/api/sc/v1/Organization/get-all?PageNumber=1&PageSize=50&SearchTerm=Test Automation`);
     const orgId = orgs.result[0].globalId;

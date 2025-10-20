@@ -254,7 +254,7 @@
     "docType": "Passport",      
     "applicantType": "International",
     "D2":{              
-        "occupationType": "Diamond Hayya Independent Talent",
+        "occupationType": "Doctor",
         "purposeOfVisit": "Business Meeting",
         "passportType": "Normal",        
         "placeOfBirth": "Dont Know",
@@ -271,6 +271,7 @@
         "emergencyNo": "987654321",
         "country": "Algeria",
         "otherNationality": true,
+        "otherNationalityCountry":"Libya",
         "countryOfResidence": "Algeria"
       }
   },
@@ -283,7 +284,7 @@
     "applicantType": "International",
     "D3":{      
         "applicantType": "International",
-        "occupationType": "Doctor",
+        "occupationType": "Diamond Hayya Entrepreneur",
         "purposeOfVisit": "Business Meeting",
         "passportType": "Normal",        
         "placeOfBirth": "Dont Know",
@@ -296,6 +297,7 @@
         "emergencyNo": "987654321",
         "country": "Algeria",
         "otherNationality": true,
+        "otherNationalityCountry":"Libya",
         "countryOfResidence": "Algeria"
       }
   }
