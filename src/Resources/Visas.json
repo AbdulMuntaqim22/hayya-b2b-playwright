@@ -180,6 +180,7 @@
     "emergencyNo": "987654321",
     "country": "Algeria",
     "otherNationality": true,
+    "otherNationalityCountry": "Libya",
     "countryOfResidence": "Algeria"
     }    
   },
@@ -197,6 +198,7 @@
         "residentPermitBack": "./src/Resources/Passports/Libya/Passport 1.jpg",
         "country": "Libya",
         "otherNationality": true,
+        "otherNationalityCountry":"Libya",
         "countryOfResidence": "Libya",
         "jobTitle": "A Partner"         
       }
@@ -216,6 +218,7 @@
         "country": "Libya",
         "jobTitle": "A Doctor",
         "otherNationality": true,
+        "otherNationalityCountry":"Libya",
         "countryOfResidence": "Libya"
       }
   },
@@ -231,12 +234,15 @@
         "passportType": "Normal",        
         "jobTitle": "A Partner",
         "maritalStatus": "Single",
+        "arabicFirstName":"كيف",
+        "arabicLastName":"كيف",
         "placeOfBirth": "Dont Know",
         "candidateApprovalDoc": "./src/Resources/Passports/Algeria/Passport 1.jpg",
         "contactNo": "123456789",
         "emergencyNo": "987654321",
         "country": "Algeria",
         "otherNationality": true,
+        "otherNationalityCountry":"Libya",
         "countryOfResidence": "Algeria"
       }
   },

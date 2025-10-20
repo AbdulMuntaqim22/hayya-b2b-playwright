@@ -135,6 +135,24 @@ async GetAccessToken(credentials) {
     expect(delGroup.statusCode).toBe(200);
   }
 
+    async deleteAllGroups(){
+    // Fetching All Organizations
+    const orgs = await this.GetRequest(`/api/sc/v1/Organization/get-all?PageNumber=1&PageSize=50&SearchTerm=Test Automation`);
+    const orgId = orgs.result[0].globalId;
+
+    // Fetching All Groups Under an Organization
+    const groups = await this.PostRequest('/api/b2b/v1/OrganizationGroup/get-all', { "organizationId": orgId });
+    
+    // Extract all group IDs from the response
+    const groupIds = groups.jsonResponse.result[0].organizationGroupDtos.map(obj => obj.globalId);
+
+    if(groupIds.length != 0){
+      // Deleting all Groups
+      const delGroup = await this.DeleteRequestWithPayload('/api/b2b/v1/OrganizationGroup/delete-org-groups', groupIds);
+      expect(delGroup.statusCode).toBe(200);
+    }    
+  }
+
   async deleteCompleteProfile(groupName){
     let profileId=[];
     // Retrieving All Submitted Applications Data
@@ -144,9 +162,12 @@ async GetAccessToken(credentials) {
       let getAppData = await this.GetRequest(`/api/b2b/v1/OrganizationGroup/get-application-by-id/${subAppGlobalId[i]}`);
       profileId.push(getAppData.result.userProfileId);
     }
-    // Deleting the Profile
-    const delProfile = await this.DeleteRequestWithPayload('/api/b2c/v1/UserProfile/delete-complete-profile', profileId);
-    expect(delProfile.statusCode).toBe(200);
+
+    if(profileId.length != 0){
+      // Deleting the Profile
+      const delProfile = await this.DeleteRequestWithPayload('/api/b2c/v1/UserProfile/delete-complete-profile', profileId);
+      expect(delProfile.statusCode).toBe(200);
+    }
   }
 
   async deleteAllProfiles(){
@@ -158,9 +179,11 @@ async GetAccessToken(credentials) {
       let getAppData = await this.GetRequest(`/api/b2b/v1/OrganizationGroup/get-application-by-id/${subAppGlobalId[i]}`);
       profileId.push(getAppData.result.userProfileId);
     }
-    // Deleting the Profile
-    const delProfile = await this.DeleteRequestWithPayload('/api/b2c/v1/UserProfile/delete-complete-profile', profileId);
-    expect(delProfile.statusCode).toBe(200);
+    if(profileId.length != 0){
+      // Deleting the Profile
+      const delProfile = await this.DeleteRequestWithPayload('/api/b2c/v1/UserProfile/delete-complete-profile', profileId);
+      expect(delProfile.statusCode).toBe(200);
+    }    
   }
 
   async approveApplication(entryReferenceNo){
