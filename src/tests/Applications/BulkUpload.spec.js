@@ -7,7 +7,7 @@ import { NewApplicationLocators } from '../../Locators/newApplicationlocators';
 import { AllApplicationLocators } from '../../Locators/allApplicationLocators';
 import { OrgGroupsLocators } from '../../Locators/orgGroupsLocators';
 
-test.describe.only('Bulk Upload Application Scenarios', () => {
+test.describe('Bulk Upload Application Scenarios', () => {
   let loginPage;
   let newApp;
   let credentials;

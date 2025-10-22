@@ -7,14 +7,14 @@ const { NewApplicationLocators } = require('../../Locators/newApplicationlocator
 const { AllApplicationLocators } = require('../../Locators/allApplicationLocators');
 const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
-test.describe.configure({ mode: 'parallel' }); 
+test.describe.configure({ mode: 'parallel' });
 
-test.describe('Manual Application Scenarios - Rejected Without Reason', () => {  
-  var loginPage;  
+test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
+  var loginPage;
   var newApp;
   let credentials;
   let apiConfig;
-  let adminUserData;  
+  let adminUserData;
   let adminApi;
   let visaData;
   test.beforeEach(async ({ page }, testInfo) => {
@@ -41,155 +41,123 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Tourist_A1_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Submitting the Application
 
-      // Submitting the Application
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      await page.locator(AllApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await page.locator(AllApplicationLocators.editAppBtn).click();
-      
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      var oneDayLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    var oneDayLater = newApp.getDateJsonObject({ days: 1 });
 
-      await page.getByText('Ok').click();      
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await page.getByText('Ok').click();
 
-    try {
 
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Tourist_A1_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
-      var oneMonthLater = newApp.getDateJsonObject({days:30});
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Tourist_A1_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -199,153 +167,123 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Tourist_A2_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Submitting the Application
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Submitting the Application
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    var oneDaylater = newApp.getDateJsonObject({ days: 1 });
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDaylater.day} ${oneDaylater.monthStr} ${oneDaylater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    await page.getByText('Ok').click();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-    try {
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Tourist_A2_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Tourist_A2_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
+
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -355,156 +293,124 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Tourist_A3_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Submitting the Application
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // Submitting the Application
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
+    await page.keyboard.press("Enter");
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.locator(NewApplicationLocators.otherNationalitySelect).fill("No");
-      await page.keyboard.press("Enter");
+    var oneDayLater = newApp.getDateJsonObject({ days: 1 });
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    await page.getByText('Ok').click();
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Tourist_A3_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-    try {
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Tourist_A3_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
-
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
 
   });
@@ -515,152 +421,121 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Tourist_A4_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Submitting the Application
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Submitting the Application
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    //await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      //await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    var oneDayLater = newApp.getDateJsonObject({ days: 1 });
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    await page.getByText('Ok').click();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Tourist_A4_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-    try {
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Tourist_A4_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
-
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    } catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -670,153 +545,122 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Tourist_F1_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Submitting the Application
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Submitting the Application
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    var oneDayLater = newApp.getDateJsonObject({ days: 1 });
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneDayLater.day} ${oneDayLater.monthStr} ${oneDayLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    await page.getByText('Ok').click();
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Tourist_F1_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-    try {
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Tourist_F1_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
-    } catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -826,154 +670,123 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Diamond_D1_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Submitting the Application
+    // Submitting the Application
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-    try {
+    await page.getByText('Ok').click();
 
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Diamond_D1_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Diamond_D1_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
   });
 
   test('D2: Verify that the user will be blocked and for applying and updating the Application when it is Rejected without a Reason', async ({ page }, testInfo) => {
@@ -982,155 +795,119 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Diamond_D2_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Submitting the Application
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // Submitting the Application
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    await page.getByText('Ok').click();
+    // Re-Applying for the Applicaiton         
+    await newApp.fill_Diamond_D2_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
-
-    try {
-
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Diamond_D2_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
-
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
-
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -1140,153 +917,121 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
 
     // Fill and Save the Application as Draft
     var groupName = await newApp.fill_Diamond_D3_AplicationAsDraft(testInfo, data, visaData.orgName);
-    try {
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
+    await newApp.attachScreenshot(testInfo, `The group ${groupName} is created`);
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
-    } catch (error) {
-      // Deleting All Draft Applications
-      await adminApi.deleteAllDraftApps(visaData.orgName);
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Verifying that the Application is created with status Draft
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
+    await expect(row).toBeVisible();
 
-    try {
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
 
-      // Verifying that the Application is created with status Draft
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Draft']`);
-      await expect(row).toBeVisible();
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted as Draft status in group Name ${groupName}`);
+    // Verifying that the Group is created
+    var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to Organization Groups Page
-      await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
-      await page.waitForLoadState('load');
-      await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+    // Submitting the Application
 
-      // Verifying that the Group is created
-      var row = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
-      await expect(row).toBeVisible();
+    // 1. Clicking on the Actions button
+    await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('load');
 
-      // Submitting the Application
+    // Select the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
 
-      // 1. Clicking on the Actions button
-      await row.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
-      await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
-      await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.submitBtn).click();
 
-      // Select the Application
-      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//input").check();
+    var okButton = page.locator(OrgGroupsLocators.okBtn);
+    await okButton.waitFor({ state: "visible" });
+    await okButton.click();
 
-      await page.locator(OrgGroupsLocators.submitBtn).click();
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
 
-      var okButton = page.locator(OrgGroupsLocators.okBtn);
-      await okButton.waitFor({ state: "visible" });
-      await okButton.click();
+    // Verifying that the Application is Submitted with the Status Pending
+    var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    await expect(row).toBeVisible();
 
-      // Navigating to All Applications Page
-      await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
-      await page.waitForLoadState('load');
-      await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
 
-      // Verifying that the Application is Submitted with the Status Pending
-      var row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
-      await expect(row).toBeVisible();
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
+    const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
 
-      await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+    // Rejecting the Visa Request
+    const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
+    expect(approveResponse.statusCode).toBe(200);
 
-      // Retrieving All Submitted Applications Data
-      const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
-      const entryReferenceNo = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).entryReference;
-      const subAppGlobalId = subApp.jsonResponse.result.find((appId) => appId.organizationGroupName === groupName).globalId;
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
+    await expect(row).toBeVisible();
 
-      // Rejecting the Visa Request
-      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo, "status": "rejected", "rejectionReason": null, "isEditable": false, "visaApplication": null });
-      expect(approveResponse.statusCode).toBe(200);
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
 
-      await page.locator(NewApplicationLocators.refreshBtn).click();
-      row = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Rejected']`);
-      await expect(row).toBeVisible();
+    await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
+    await page.locator(AllApplicationLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
 
-      await newApp.attachScreenshot(testInfo, `The Application Status changed to Rejected`);
+    await page.locator(AllApplicationLocators.editAppBtn).click();
 
-      await row.locator("xpath=parent::td/preceding-sibling::td[5]/button").click();
-      await page.locator(AllApplicationLocators.viewDetailsBtn).click();
-      await page.waitForLoadState('load');
-      
-      await page.locator(AllApplicationLocators.editAppBtn).click();      
+    await page.locator(NewApplicationLocators.updateApplicationBtn).click();
 
-      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+    var oneMonthLater = newApp.getDateJsonObject({ days: 30 });
 
-      var oneMonthLater = newApp.getDateJsonObject({days:1});
-      
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
-      await page.waitForTimeout(1000);
-      await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(`Cannot update rejected application. Please retry after ${oneMonthLater.day} ${oneMonthLater.monthStr} ${oneMonthLater.year}.`);
+    await page.waitForTimeout(1000);
+    await newApp.attachScreenshot(testInfo, `The user Can't Update Application When Rejected without Reason`);
 
-      await page.getByText('Ok').click();
-    } catch (error) {
-      await page.waitForTimeout(10000);
-      // Deleting Complete Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Group
-      await adminApi.deleteGroup(visaData.orgName, groupName)
+    await page.getByText('Ok').click();
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
+    // Re-Applying for the Applicaiton         
+    var groupName2 = await newApp.fill_Diamond_D3_Aplication(testInfo, data, visaData.orgName);
+    // Clicking on Save as Draft button    
+    await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
 
-    try {
-      // Re-Applying for the Applicaiton         
-      var groupName2 = await newApp.fill_Diamond_D3_Aplication(testInfo, data, visaData.orgName);
-      // Clicking on Save as Draft button    
-      await page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    //Error Message is Displayed When Saving the Rejected Application as Draft
+    var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
+    expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
 
-      //Error Message is Displayed When Saving the Rejected Application as Draft
-      var msg = `Cannot apply for visa at this moment, please retry after ${oneMonthLater.day}/${oneMonthLater.month}/${oneMonthLater.year}.`;
-      expect(await page.locator(NewApplicationLocators.errorDialogMsg).textContent()).toBe(msg);
+    await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
 
-      await newApp.attachScreenshot(testInfo, `The user Cannot apply again when it is Rejected.`);
-    }
-    catch (error) {
-      // Deleting the Profile
-      await adminApi.deleteCompleteProfile(groupName);
-      // Deleting the Groups
-      await adminApi.deleteGroup(visaData.orgName, groupName);
-      await adminApi.deleteGroup(visaData.orgName, groupName2);
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
-    }
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
-    // Deleting the Groups
-    await adminApi.deleteGroup(visaData.orgName, groupName);
-    await adminApi.deleteGroup(visaData.orgName, groupName2);
 
   });
 
@@ -1297,6 +1042,7 @@ test.describe('Manual Application Scenarios - Rejected Without Reason', () => {
     // For example, you might want to take a screenshot or log out
     await loginPage.attachScreenshot(testInfo, 'Test Completed');
     await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllGroups();
 
   });
 

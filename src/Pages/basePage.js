@@ -124,8 +124,8 @@ class BasePage {
         now.getHours(),
       ));
 
-      // Shift to Qatar timezone (UTC+3)
-      futureDate.setHours(futureDate.getHours() - 3);
+      // // Shift to Qatar timezone (UTC+3)
+      // futureDate.setHours(futureDate.getHours() - 3);
 
       var day = futureDate.getUTCDate().toString().padStart(2, '0');
       var month = futureDate.toLocaleString('default', { month: 'short' }).slice(0, 3);
