@@ -9,7 +9,7 @@ call npx playwright test src/tests/RegisterOrganization src/tests/Events src/tes
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\Dash_Even_RegisterOrg"
+set "report_dest=C:\B2B-PlaywrightReports\Dash_Even_RegisterOrg"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -22,7 +22,7 @@ call npx playwright test src/tests/Applications/A1-PaymentExemption src/tests/Ap
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\A1_PaymentExemption_ArabicFields"
+set "report_dest=C:\B2B-PlaywrightReports\A1_PaymentExemption_ArabicFields"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -35,7 +35,7 @@ call npx playwright test src/tests/Applications/BulkUpload --workers=1
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\Bulk_Upload"
+set "report_dest=C:\B2B-PlaywrightReports\Bulk_Upload"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -48,7 +48,7 @@ call npx playwright test src/tests/Applications/NewApplication-Approved --worker
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\Approved_Application"
+set "report_dest=C:\B2B-PlaywrightReports\Approved_Application"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -61,7 +61,7 @@ call npx playwright test src/tests/Applications/NewApplication-Rejected-With-Rea
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\Rejected_With_Reasons"
+set "report_dest=C:\B2B-PlaywrightReports\Rejected_With_Reasons"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -74,7 +74,7 @@ call npx playwright test src/tests/Applications/NewApplication-Rejected-Without-
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\Rejected_Without_Reasons"
+set "report_dest=C:\B2B-PlaywrightReports\Rejected_Without_Reasons"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
@@ -87,7 +87,7 @@ call npx playwright test src/tests/Applications/NewApplication-Update-Status --w
 
 REM Define source and destination
 set "report_src=%cd%\playwright-report"
-set "report_dest=C:\B2B-playwright-report\UpdateStatus"
+set "report_dest=C:\B2B-PlaywrightReports\UpdateStatus"
 mkdir "%report_dest%"
 REM Move report folder
 xcopy "%report_src%" "%report_dest%" /E /I /Y
