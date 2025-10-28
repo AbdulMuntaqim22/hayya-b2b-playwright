@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test';
 const fs = require('fs');
 import API from '../../Pages/api';
+import EventsPage from '../../Pages/eventsPage';
 import LoginPage from '../../Pages/loginPage';
 import NewApplicationPage from '../../Pages/newApplicationPage';
 import { NewApplicationLocators } from '../../Locators/newApplicationlocators';
 import { AllApplicationLocators } from '../../Locators/allApplicationLocators';
 import { OrgGroupsLocators } from '../../Locators/orgGroupsLocators';
+import { EventsLocators } from '../../Locators/eventsLocators';
 
-test.describe('Bulk Upload Application Scenarios', () => {
+test.describe.only('Bulk Upload Application Scenarios', () => {
   let loginPage;
   let newApp;
   let credentials;
@@ -15,6 +17,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
   let adminApi;
   let adminUserData;
   let visaData;
+  let eventsPage;
   test.beforeEach(async ({ page }, testInfo) => {
 
     apiConfig = JSON.parse(fs.readFileSync('./src/utils/apiConfig.json', 'utf-8'));
@@ -22,6 +25,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     adminApi = new API(page, apiConfig.baseUrl);
     loginPage = new LoginPage(page);
     newApp = new NewApplicationPage(page);
+    eventsPage = new EventsPage(page);
 
     credentials = JSON.parse(fs.readFileSync('./src/utils/userCreds.json', 'utf-8'));
 
@@ -364,6 +368,184 @@ test.describe('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteGroup(visaData.orgName, groupName);
   });
 
+  test('Verify that the user can Submit a Bulk upload application for A2 Without GCC IDs', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_A2_Without_GCC;
+
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible({ timeout: 30000 });
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Purpose of Visit 
+      await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A2.purposeOfVisit);
+      await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
+
+      // Selecting Passport Type
+      await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A2.passportType);
+      await page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+
+      // Selecting Job Title
+      await page.locator(NewApplicationLocators.jobTitleSelect).fill(data.A2.jobTitle);
+      await page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
+
+      // Filling Exp Data field
+      await newApp.fillDatePicker(NewApplicationLocators.expDateTxt, data.A2.residenExpDate);
+
+      // Selecting Country of Residence
+      await page.locator(NewApplicationLocators.gccCountryOfResidenceSelect).fill(data.A2.countryOfResidence);
+      await page.keyboard.press('Enter');
+
+      // Selecting Yes for Previous/Other Nationality Question
+      if (data.A2.otherNationality) {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await page.keyboard.press('Enter');
+        await page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.A2.otherNationalityCountry);
+        await page.keyboard.press('Enter');
+      }
+      else {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
+        await page.keyboard.press('Enter');
+      }
+
+      // Uploading Resident Permit
+      await page.locator(NewApplicationLocators.residentPermitFront).setInputFiles(data.A2.residentPermitFront);
+      await page.locator(NewApplicationLocators.residentPermitFront).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await page.locator(NewApplicationLocators.residentPermitBack).setInputFiles(data.A2.residentPermitBack);
+      await page.locator(NewApplicationLocators.residentPermitBack).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+
+      // Entering Contact number
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.A2.contactNo);
+
+      // Clicking on Save as Draft button    
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      await page.locator(NewApplicationLocators.continueBtn).click();
+    }
+
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(OrgGroupsLocators.groupTableRows + "/td//input").first().waitFor({ state: 'visible' });
+    await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
+
+    await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.okBtn).click();
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is Submitted with the Status Pending
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.entryReference);
+    const subAppGlobalId = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.globalId);
+
+
+    // Approving the Visa Request for each app
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo[i], "status": "approved", "rejectionReason": null, "isEditable": false });
+      expect(approveResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Payment']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Payment`);
+
+    // Updating the Payment Status for Each App
+    for (let i = 0; i < subAppGlobalId.length; i++) {
+      const paymentApproveRes = await adminApi.PostRequest(`/api/sc/v1/Workflow/advance-workflow/${subAppGlobalId[i]}?password=1yteBz@LeV8OBi$muRD`);
+      expect(paymentApproveRes.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Entry Visa']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
+
+    var dateTimeNow = new Date().toISOString();
+    // Updating the Payment Status for each App
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo[i], visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 1, visaStartDate: dateTimeNow, visaEndDate: dateTimeNow, issueDate: dateTimeNow, lastEntryDate: dateTimeNow });
+      expect(approveAppResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Approved']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
+
+    // Deleting the Profile
+    await adminApi.deleteCompleteProfile(groupName);
+    // Deleting the Group
+    await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
   test('Verify that the user can Submit a Bulk upload application for A3', async ({ page }, testInfo) => {
     //var visaNum = newApp.generateRandomFiveDigit() + '12';
     var data = visaData.BulkUpload_A3;
@@ -535,6 +717,511 @@ test.describe('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteCompleteProfile(groupName);
     // Deleting the Group
     await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
+  test('Verify that the user can Submit a Bulk upload application for A4', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_A4;
+
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible({ timeout: 30000 });
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Purpose of Visit 
+      await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A4.purposeOfVisit);
+      await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
+
+      // Selecting Passport Type
+      await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A4.passportType);
+      await page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+
+      // Selecting Job Title
+      await page.locator(NewApplicationLocators.jobTitleSelect).fill(data.A4.jobTitle);
+      await page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
+
+      // Selecting Yes for Previous/Other Nationality Question
+      if (data.A4.otherNationality) {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await page.keyboard.press('Enter');
+        //await page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.A4.otherNationalityCountry);
+        //await page.keyboard.press('Enter');
+      }
+      else {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
+        await page.keyboard.press('Enter');
+      }
+      // Entering Contact number
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.A4.contactNo);
+
+      // Clicking on Save as Draft button    
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      await page.locator(NewApplicationLocators.continueBtn).click();
+    }
+
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(OrgGroupsLocators.groupTableRows + "/td//input").first().waitFor({ state: 'visible' });
+    await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
+
+    await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.okBtn).click();
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is Submitted with the Status Pending
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.entryReference);
+    const subAppGlobalId = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.globalId);
+
+
+    // Approving the Visa Request for each app
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo[i], "status": "approved", "rejectionReason": null, "isEditable": false });
+      expect(approveResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Payment']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Payment`);
+
+    // Updating the Payment Status for Each App
+    for (let i = 0; i < subAppGlobalId.length; i++) {
+      const paymentApproveRes = await adminApi.PostRequest(`/api/sc/v1/Workflow/advance-workflow/${subAppGlobalId[i]}?password=1yteBz@LeV8OBi$muRD`);
+      expect(paymentApproveRes.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Entry Visa']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
+
+    var dateTimeNow = new Date().toISOString();
+    // Updating the Payment Status for each App
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo[i], visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 1, visaStartDate: dateTimeNow, visaEndDate: dateTimeNow, issueDate: dateTimeNow, lastEntryDate: dateTimeNow });
+      expect(approveAppResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Approved']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
+
+    // Deleting the Profile
+    await adminApi.deleteCompleteProfile(groupName);
+    // Deleting the Group
+    await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
+  test('Verify that the user can Submit a Bulk upload application for A3 Without ETA Docs', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_A3_Without_ETA;
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data,);
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Purpose of Visit 
+      await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.A3.purposeOfVisit);
+      await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
+
+      // Selecting Passport Type
+      await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.A3.passportType);
+      await page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+
+      // Selecting Type
+      await page.locator(NewApplicationLocators.visaTypeA3Checkbox).check();
+
+      // Selecting Yes for Previous/Other Nationality Question
+      if (data.A3.otherNationality) {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
+        await page.keyboard.press('Enter');
+        await page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.A3.otherNationalityCountry);
+        await page.keyboard.press('Enter');
+      }
+      else {
+        await page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
+        await page.keyboard.press('Enter');
+      }
+
+
+      // Selecting Expiry Data
+      await newApp.fillDatePicker(NewApplicationLocators.expDateTxt, "30/01/2045");
+
+      // Selecting Country of Residence
+      await page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.A3.countryOfResidence);
+      await page.keyboard.press('Enter');
+
+      // Uploading Schengen Documents
+      await page.locator(NewApplicationLocators.frontSideDoc).setInputFiles(data.A3.schengenFront);
+      await page.locator(NewApplicationLocators.frontSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+      await page.locator(NewApplicationLocators.backSideDoc).setInputFiles(data.A3.schengenBack);
+      await page.locator(NewApplicationLocators.backSideDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
+
+      // Entering Contact and Emergency Contact number
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.A3.contactNo);
+      //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.A3.emergencyNo);
+
+      // Clicking on Save as Draft button    
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      await page.locator(NewApplicationLocators.continueBtn).click();
+    }
+
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(OrgGroupsLocators.groupTableRows + "/td//input").first().waitFor({ state: 'visible' });
+    await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
+
+    await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.okBtn).click();
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is Submitted with the Status Pending
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.entryReference);
+    const subAppGlobalId = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.globalId);
+
+
+    // Approving the Visa Request for each app
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo[i], "status": "approved", "rejectionReason": null, "isEditable": false });
+      expect(approveResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Payment']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Payment`);
+
+    // Updating the Payment Status for Each App
+    for (let i = 0; i < subAppGlobalId.length; i++) {
+      const paymentApproveRes = await adminApi.PostRequest(`/api/sc/v1/Workflow/advance-workflow/${subAppGlobalId[i]}?password=1yteBz@LeV8OBi$muRD`);
+      expect(paymentApproveRes.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Entry Visa']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
+
+    // Updating the Payment Status for each App
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo[i], visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 1, visaStartDate: "2025-07-15T21:44:58.147Z", visaEndDate: "2025-07-15T21:44:58.147Z", issueDate: "2025-07-15T21:44:58.147Z", lastEntryDate: "2025-07-15T21:44:58.147Z" });
+      expect(approveAppResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Approved']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
+
+    // Deleting the Profile
+    await adminApi.deleteCompleteProfile(groupName);
+    // Deleting the Group
+    await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
+  test('Verify that the user can Submit a Bulk upload application for F1', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_F1;
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible({ timeout: 30000 });
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Purpose of Visit 
+      await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.F1.purposeOfVisit);
+      await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
+
+      // Selecting Passport Type
+      await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.F1.passportType);
+      await page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+
+      //Selecting Yes for Previous/Other Nationality Question
+      if (data.F1.otherNationality) {
+        await page.locator(NewApplicationLocators.otherNationalityYesOption).check();
+        await page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).fill(data.F1.otherNationalityCountry);
+        await page.keyboard.press('Enter');
+      }
+      else {
+        await page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+      }
+
+      // Selecting Country of Residence
+      await page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.F1.countryOfResidence);
+      await page.keyboard.press('Enter');
+
+      // Entering Contact and Emergency Contact number
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.F1.contactNo);
+      //await page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.F1.emergencyNo);        
+
+      // Clicking on Save as Draft button    
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      await page.locator(NewApplicationLocators.continueBtn).click();
+    }
+
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(OrgGroupsLocators.groupTableRows + "/td//input").first().waitFor({ state: 'visible' });
+    await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
+
+    await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.okBtn).click();
+
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is Submitted with the Status Pending
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.entryReference);
+    const subAppGlobalId = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.globalId);
+
+
+    // Approving the Visa Request for each app
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo[i], "status": "approved", "rejectionReason": null, "isEditable": false });
+      expect(approveResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(NewApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Payment']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Payment`);
+
+    // Updating the Payment Status for Each App
+    for (let i = 0; i < subAppGlobalId.length; i++) {
+      const paymentApproveRes = await adminApi.PostRequest(`/api/sc/v1/Workflow/advance-workflow/${subAppGlobalId[i]}?password=1yteBz@LeV8OBi$muRD`);
+      expect(paymentApproveRes.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Entry Visa']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
+
+    // Updating the Payment Status for each App
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo[i], visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 1, visaStartDate: "2025-07-15T21:44:58.147Z", visaEndDate: "2025-07-15T21:44:58.147Z", issueDate: "2025-07-15T21:44:58.147Z", lastEntryDate: "2025-07-15T21:44:58.147Z" });
+      expect(approveAppResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Approved']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
+
+    // Deleting Complete Profile
+    await adminApi.deleteCompleteProfile(groupName);
+    // Deleting the Group
+    await adminApi.deleteGroup(visaData.orgName, groupName)
   });
 
   test('Verify that the user can Submit a Bulk upload application for D1 For Passport', async ({ page }, testInfo) => {
@@ -720,7 +1407,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       await expect(appRows.nth(i)).toBeVisible();
     }
 
-    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);    
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
 
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
@@ -778,7 +1465,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
       // Selecting Occupation Type
       await page.locator(NewApplicationLocators.occupationTypeSelect).fill(data.D2.occupationType);
-      await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');      
+      await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
       // Selecting Passport Type
       await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.D2.passportType);
@@ -806,7 +1493,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
         await page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await page.keyboard.press('Enter');
       }
-      
+
 
       // Entering Place Of Birth
       await page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.D2.placeOfBirth);
@@ -848,7 +1535,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       await page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
       // Entering Contact and Emergency Contact number
-      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D2.contactNo);      
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D2.contactNo);
 
       // Clicking on Save as Draft button    
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
@@ -931,7 +1618,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     }
 
     await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
-  
+
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
     // Deleting the Group
@@ -942,7 +1629,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
     var data = visaData.BulkUpload_D3;
 
     // Fill and Save the Application as Draft
-    var groupName = await newApp.fill_Bulk_Upload(testInfo, data,);
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);
     // Navigating to All Applications Page
     await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
     await page.waitForLoadState('load');
@@ -990,7 +1677,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
       // Selecting Occupation Type
       await page.locator(NewApplicationLocators.occupationTypeSelect).fill(data.D3.occupationType);
-      await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');      
+      await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
 
       // Selecting Passport Type
       await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.D3.passportType);
@@ -1017,7 +1704,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       else {
         await page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await page.keyboard.press('Enter');
-      }      
+      }
 
       // Entering Place Of Birth
       await page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.D3.placeOfBirth);
@@ -1043,7 +1730,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
       await page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
       // Entering Contact and Emergency Contact number
-      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D3.contactNo);      
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D3.contactNo);
 
       // Clicking on Save as Draft button    
       await page.locator(NewApplicationLocators.updateApplicationBtn).click();
@@ -1125,7 +1812,164 @@ test.describe('Bulk Upload Application Scenarios', () => {
       await expect(appRows.nth(i)).toBeVisible();
     }
 
-    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);    
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
+    // Deleting the Profile
+    await adminApi.deleteCompleteProfile(groupName);
+    // Deleting the Group
+    await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
+  test('Verify that the user can Submit a Bulk upload application for Events', async ({ page }, testInfo) => {
+    //creating the Event    
+    await page.locator(EventsLocators.eventLeftMenu).click();
+    const eventName = await eventsPage.createEvent(testInfo, true);
+
+    await adminApi.approveEvent(eventName);
+
+    var data = visaData.BulkUpload_Event;
+
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload_Event(testInfo, data, eventName);
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i < appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Purpose of Visit 
+      //await page.locator(NewApplicationLocators.visitTypeSelect).fill(data.D3.purposeOfVisit);
+      //await page.locator(NewApplicationLocators.visitTypeSelect).press('Enter');
+
+      // Selecting Passport Type
+      await page.locator(NewApplicationLocators.passportTypeSelect).fill(data.D3.passportType);
+      await page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
+
+      // Selecting Job Title
+      await page.locator(NewApplicationLocators.jobTitleSelect).fill(data.D3.jobTitle);
+      await page.locator(NewApplicationLocators.jobTitleSelect).press('Enter');
+      
+
+      // Selecting Country of Residence
+      await page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.D3.countryOfResidence);
+      await page.locator(NewApplicationLocators.countryOfResidenceSelect).press('Enter');
+      
+
+      // Selecting Previous/Other Nationality Question
+      if (data.D3.otherNationality) {          
+          await page.locator(NewApplicationLocators.otherNationalityYesOption).check();          
+      }
+      else {
+        await page.locator(NewApplicationLocators.otherNationalityNoOption).check();        
+      }      
+      
+      // Entering Contact and Emergency Contact number
+      await page.locator(NewApplicationLocators.contactNoTxt).fill(data.D3.contactNo);
+
+      // Clicking on Save as Draft button    
+      await page.locator(NewApplicationLocators.updateApplicationBtn).click();
+      await page.locator(NewApplicationLocators.continueBtn).click();
+    }
+
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewDraftAppBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(OrgGroupsLocators.groupTableRows + "/td//input").first().waitFor({ state: 'visible' });
+    await page.locator(OrgGroupsLocators.selectAllCheckbox).check();
+
+    await page.locator(OrgGroupsLocators.submitBtn).click();
+    await page.locator(OrgGroupsLocators.okBtn).click();
+
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(AllApplicationLocators.appTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is Submitted with the Status Pending
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application is submitted with status Pending`);
+
+    // Retrieving All Submitted Applications Data
+    const subApp = await adminApi.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": visaData.orgName });
+    const entryReferenceNo = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.entryReference);
+    const subAppGlobalId = subApp.jsonResponse.result.filter((appId) => appId.organizationGroupName === groupName).map(app => app.globalId);
+
+
+    // Approving the Visa Request for each app
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveResponse = await adminApi.PostRequest('/api/shared/v1/ExternalCallback/moi/submitted-app', { "entryReferenceNumber": entryReferenceNo[i], "status": "approved", "rejectionReason": null, "isEditable": false });
+      expect(approveResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Pending Entry Visa']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Pending Entry Visa`);
+
+    // Updating the Payment Status for each App
+    for (let i = 0; i < entryReferenceNo.length; i++) {
+      const approveAppResponse = await adminApi.PostRequest(`/api/shared/v1/ExternalCallback/moi/visa-permit`, { entryReferenceNumber: entryReferenceNo[i], visaNumber: newApp.generateRandomFiveDigit() + '12', visaEntryType: 0, visaStartDate: "2025-07-15T21:44:58.147Z", visaEndDate: "2025-07-15T21:44:58.147Z", issueDate: "2025-07-15T21:44:58.147Z", lastEntryDate: "2025-07-15T21:44:58.147Z" });
+      expect(approveAppResponse.statusCode).toBe(200);
+    }
+
+    await page.locator(AllApplicationLocators.refreshBtn).click();
+    appRows = page.locator(AllApplicationLocators.appTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td[15]/span[text()='Approved']`);
+    appRowCount = await appRows.count();
+    for (let i = 0; i <= appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Application Status changed to Approved`);
     // Deleting the Profile
     await adminApi.deleteCompleteProfile(groupName);
     // Deleting the Group

@@ -217,6 +217,17 @@ async GetAccessToken(credentials) {
     expect(response.statusCode).toBe(200);
     await this.page.waitForTimeout(15000);
   }
+
+  async approveEvent(eventName)
+  {
+    // Fetching All Event Details to retrieve the Event ID
+    const eventDetails = await this.PostRequest('/api/sc/v1/Event/requests', { "pageNumber": 1, "pageSize": 1, "searchTerm": eventName });
+    const myEventId = eventDetails.jsonResponse.result[0].globalId;
+
+    // Approving the Event
+    const approveResponse = await this.PutRequest(`/api/sc/v1/Event/requests/approve/${myEventId}`);
+    expect(approveResponse.statusCode).toBe(200);
+  }
 }
 
 export default API;

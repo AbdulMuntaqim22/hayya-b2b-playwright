@@ -1,5 +1,5 @@
 {
-  "orgName":"Test Automation",
+  "orgName":"Test Automation01",
   "A1": {
     "visaCat": "Tourist",
     "visaType": "A1 - Tourist Visa",
@@ -203,12 +203,89 @@
         "jobTitle": "A Partner"         
       }
   },
+  "BulkUpload_A2_Without_GCC":{
+    "visaCat": "Tourist",
+    "visaType": "A2 - GCC Resident Visa",
+    "accommodationDetails": "Not Decided",
+    "zipFile": "./src/Resources/Bulk_Attachments - A2 - Without GCC.zip",
+    "A2":{      
+        "purposeOfVisit": "Business Meeting",
+        "passportType": "Normal",        
+        "contactNo": "123456789",
+        "emergencyNo": "987654321",
+        "residenExpDate":"01/01/2040",
+        "residentPermitFront": "./src/Resources/Passports/Libya/Passport 1.jpg",
+        "residentPermitBack": "./src/Resources/Passports/Libya/Passport 1.jpg",
+        "country": "Libya",
+        "otherNationality": true,
+        "otherNationalityCountry":"Libya",
+        "countryOfResidence": "Libya",
+        "jobTitle": "A Partner"         
+      }
+  },
   "BulkUpload_A3":{
     "visaCat": "Tourist",
     "visaType": "A3 - Visa with ETA",
     "accommodationDetails": "Not Decided",
     "zipFile": "./src/Resources/Bulk_Attachments - A3.zip",
     "A3":{      
+        "purposeOfVisit": "Business Meeting",
+        "passportType": "Normal",        
+        "contactNo": "123456789",
+        "emergencyNo": "987654321",
+        "schengenFront": "./src/Resources/Permit.jpg",
+        "schengenBack": "./src/Resources/Permit.jpg",
+        "country": "Libya",
+        "jobTitle": "A Doctor",
+        "otherNationality": true,
+        "otherNationalityCountry":"Libya",
+        "countryOfResidence": "Libya"
+      }
+  },
+  "BulkUpload_A4":{
+    "visaCat": "Tourist",
+    "visaType": "A4 - Visa for Companion of GCC Citizen",
+    "accommodationDetails": "Not Decided",
+    "zipFile": "./src/Resources/Bulk_Attachments - A2.zip",
+    "A4":{      
+        "purposeOfVisit": "Business Meeting",
+        "passportType": "Normal",        
+        "contactNo": "123456789",
+        "emergencyNo": "987654321",
+        "residentPermitFront": "./src/Resources/Passports/Libya/Passport 1.jpg",
+        "residentPermitBack": "./src/Resources/Passports/Libya/Passport 1.jpg",
+        "country": "Libya",
+        "otherNationality": true,
+        "otherNationalityCountry":"Libya",
+        "countryOfResidence": "Libya",
+        "jobTitle": "A Partner"         
+      }
+  },
+  "BulkUpload_A3_Without_ETA":{
+    "visaCat": "Tourist",
+    "visaType": "A3 - Visa with ETA",
+    "accommodationDetails": "Not Decided",
+    "zipFile": "./src/Resources/Bulk_Attachments - A3 - Without ETA.zip",
+    "A3":{      
+        "purposeOfVisit": "Business Meeting",
+        "passportType": "Normal",        
+        "contactNo": "123456789",
+        "emergencyNo": "987654321",
+        "schengenFront": "./src/Resources/Permit.jpg",
+        "schengenBack": "./src/Resources/Permit.jpg",
+        "country": "Libya",
+        "jobTitle": "A Doctor",
+        "otherNationality": true,
+        "otherNationalityCountry":"Libya",
+        "countryOfResidence": "Libya"
+      }
+  },
+  "BulkUpload_F1":{
+    "visaCat": "Tourist",
+    "visaType": "F1 - Visa Free for US Citizens",
+    "accommodationDetails": "Not Decided",
+    "zipFile": "./src/Resources/Bulk_Attachments - F1.zip",
+    "F1":{      
         "purposeOfVisit": "Business Meeting",
         "passportType": "Normal",        
         "contactNo": "123456789",
@@ -293,6 +370,30 @@
         "cvDoc": "./src/Resources/Passports/Algeria/Passport 1.jpg",
         "caseResearchDoc": "./src/Resources/Passports/Algeria/Passport 1.jpg",
         "bankStatementDoc": "./src/Resources/Passports/Algeria/Passport 1.jpg",
+        "contactNo": "123456789",
+        "emergencyNo": "987654321",
+        "country": "Algeria",
+        "otherNationality": true,
+        "otherNationalityCountry":"Libya",
+        "countryOfResidence": "Algeria"
+      }
+  },
+  "BulkUpload_Event":{
+    "visaCat": "Diamond Visa",    
+    "accommodationDetails": "Not Decided",
+    "zipFile": "./src/Resources/Bulk_Attachments - A3.zip",
+    "docType": "Passport",      
+    "applicantType": "International",
+    "D3":{              
+        "applicantType": "International",
+        "occupationType": "Diamond Hayya Entrepreneur",
+        "jobTitle": "Doctor",
+        "purposeOfVisit": "Business Meeting",
+        "passportType": "Normal",        
+        "placeOfBirth": "Dont Know",
+        "residenExpDate":"01/01/2040",
+        "residentPermitFront": "./src/Resources/Passports/Libya/Passport 1.jpg",
+        "residentPermitBack": "./src/Resources/Passports/Libya/Passport 1.jpg",
         "contactNo": "123456789",
         "emergencyNo": "987654321",
         "country": "Algeria",

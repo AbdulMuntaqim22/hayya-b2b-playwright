@@ -74,10 +74,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -180,10 +180,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -287,10 +287,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -299,13 +299,13 @@ class NewApplicationPage extends BasePage {
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
         await this.page.keyboard.press('Enter');
-        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);      
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
         await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
@@ -405,10 +405,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -417,13 +417,13 @@ class NewApplicationPage extends BasePage {
       if (data.otherNationality) {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('Yes');
         await this.page.keyboard.press('Enter');
-        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);        
+        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
         await this.page.keyboard.press('Enter');
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Filling Exp Data field
       await this.fillDatePicker(NewApplicationLocators.residenceExpDateTxt, "01/01/2040");
@@ -516,10 +516,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -533,8 +533,8 @@ class NewApplicationPage extends BasePage {
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
-        await this.page.keyboard.press('Enter');        
-      }      
+        await this.page.keyboard.press('Enter');
+      }
 
       // Selecting Type
       await this.page.locator(NewApplicationLocators.visaTypeA3Checkbox).check();
@@ -580,9 +580,9 @@ class NewApplicationPage extends BasePage {
     var groupName = "Group " + this.generateRandomFiveDigit();
     // Navigating to New Application Page
     await this.page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
-    
+
     // Opening the Manual Application
-    await this.page.locator(NewApplicationLocators.manualAppBtn).click();    
+    await this.page.locator(NewApplicationLocators.manualAppBtn).click();
 
     // Wait for the first field of the manual application form to be visible
     await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
@@ -631,10 +631,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -649,7 +649,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }          
+      }
 
       // Selecting Type
       await this.page.locator(NewApplicationLocators.visaTypeA3Checkbox).check();
@@ -748,10 +748,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -864,10 +864,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -977,10 +977,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -994,8 +994,8 @@ class NewApplicationPage extends BasePage {
       }
       else {
         await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
-      }      
-            
+      }
+
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -1085,10 +1085,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1109,7 +1109,7 @@ class NewApplicationPage extends BasePage {
         // Selecting Other Country
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).fill(data.otherCountry);
         await this.page.locator(NewApplicationLocators.previousOtherCitizenshipSelect).press('Enter');
-      }      
+      }
 
       // Selecting Country of Residence
       await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
@@ -1203,10 +1203,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1237,7 +1237,7 @@ class NewApplicationPage extends BasePage {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
       }
-      
+
 
       // Selecting Marital Status
       await this.page.locator(NewApplicationLocators.maritalStatusSelect).fill(data.maritalStatus);
@@ -1262,7 +1262,7 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
       await this.page.locator(NewApplicationLocators.continueBtn).click();
 
-      
+
 
     }
     catch (error) {
@@ -1347,10 +1347,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1379,7 +1379,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Selecting Marital Status
       await this.page.locator(NewApplicationLocators.maritalStatusSelect).fill(data.maritalStatus);
@@ -1485,10 +1485,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1513,7 +1513,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1650,10 +1650,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1678,7 +1678,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1718,7 +1718,7 @@ class NewApplicationPage extends BasePage {
       // Uploading Job Contract or Offer letter from Hiring entity
       await this.page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(data.offerLetterDoc);
       await this.page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
-      
+
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
@@ -1814,10 +1814,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1842,7 +1842,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -1965,10 +1965,10 @@ class NewApplicationPage extends BasePage {
       );
 
       // Entering Arabic Names
-      if(data.arabicFirstName){
+      if (data.arabicFirstName) {
         await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
       }
-      if(data.arabicLastName){
+      if (data.arabicLastName) {
         await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
       }
 
@@ -1993,7 +1993,7 @@ class NewApplicationPage extends BasePage {
       else {
         await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
         await this.page.keyboard.press('Enter');
-      }      
+      }
 
       // Entering Place Of Birth
       await this.page.locator(NewApplicationLocators.placeOfBirthTxt).fill(data.placeOfBirth);
@@ -2019,7 +2019,7 @@ class NewApplicationPage extends BasePage {
       await this.page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=following-sibling::div//img[@alt='Preview']").waitFor({ state: "visible" });
 
       await this.page.locator(NewApplicationLocators.emailTxt).fill("email@email.com");
-      
+
       // Entering Contact and Emergency Contact number
       await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
       await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
@@ -2096,6 +2096,62 @@ class NewApplicationPage extends BasePage {
     return groupName;
   }
 
+  async fill_Bulk_Upload_Event(testInfo, data, eventName) {
+    var groupName = "Group " + this.generateRandomFiveDigit();
+
+    // Navigating to New Application Page
+    await this.page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await this.page.locator(NewApplicationLocators.bulkUploadBtn).click();
+
+    // Wait for the first field of the manual application form to be visible
+    await this.page.waitForSelector(NewApplicationLocators.eventSelect, { state: 'visible' });
+
+    //Selecting the event
+    await this.page.locator(NewApplicationLocators.eventSelect).click();
+    await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${eventName}']`).click();    
+
+    // Entering Group Name
+    await this.page.locator(NewApplicationLocators.groupNameTxt).fill(groupName);
+
+    // Entering Accommodation Details
+    await this.page.locator(NewApplicationLocators.accommodationDetailsTxt).fill(data.accommodationDetails);
+
+    // Uploading the Zip file
+    await this.page.locator(NewApplicationLocators.uploadZipFile).setInputFiles(data.zipFile);
+
+    
+      // selecting the Applicant Type
+      if (data.applicantType === "International") {
+        await this.page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+      } else {
+        await this.page.locator(NewApplicationLocators.qatarResidentOptionCheckbox).check();
+      }
+      if (data.docType === 'Passport') {
+        await this.page.locator(NewApplicationLocators.passportOption).check();
+      }
+      else {
+        await this.page.locator(NewApplicationLocators.qidOption).check();
+      }    
+
+    // clicking on the submit button
+    await this.page.locator(NewApplicationLocators.submitBtn).click();
+
+    // clicking on the Continue button
+    await this.page.locator(NewApplicationLocators.continueBtn).click();
+
+    await this.page.locator(NewApplicationLocators.tableRows).first().waitFor({ state: "visible" });
+
+    var element = NewApplicationLocators.tableRows + "//td/p[text()='" + groupName + "']/ancestor::td/following-sibling::td[7]/span";
+    // Waiting for the bul Upload to be Processed
+    await this.reloadUntilValueChanges(element, "Completed");
+
+    await this.attachScreenshot(testInfo, "The Bulk Data is Processed");
+
+    return groupName;
+  }
+
   async update_Submitted_Application(testInfo) {
     await this.page.locator(AllApplicationLocators.editAppBtn).click();
 
@@ -2103,13 +2159,13 @@ class NewApplicationPage extends BasePage {
     var occupationType = this.page.locator(NewApplicationLocators.otherNationalityNoOption);
 
     try {
-      await occupationType.waitFor({ state: 'visible', timeout: 15000 });      
+      await occupationType.waitFor({ state: 'visible', timeout: 15000 });
       await occupationType.fill(data.occupationType);
       await this.page.keyboard.press('Enter');
     }
-    catch{}
+    catch { }
     try {
-      await otherNationalCheckbox.waitFor({ state: 'visible', timeout: 15000 });      
+      await otherNationalCheckbox.waitFor({ state: 'visible', timeout: 15000 });
       await otherNationalCheckbox.check();
     } catch {
       await this.page.locator(NewApplicationLocators.otherNationalitySelect).fill('No');
