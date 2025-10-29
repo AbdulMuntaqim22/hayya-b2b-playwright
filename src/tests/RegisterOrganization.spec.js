@@ -4,7 +4,7 @@ import LoginPage from '../Pages/loginPage';
 import RegisterOrganizationPage from '../Pages/registerOrganizationPage';
 const { RegisterOrganizationLocators } = require('../Locators/registerOrganizationLocators');
 
-test.describe('Register Organization Form Scenarios', () => {  
+test.describe.only('Register Organization Form Scenarios', () => {  
   var loginPage;  
   var regOrg;
   let credentials;
@@ -15,7 +15,7 @@ test.describe('Register Organization Form Scenarios', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.newUser);
   });
 
-  test('Verify that the following fields are required in Register Organization form', async ({ page },testInfo) => {
+  test.only('Verify that the following fields are required in Register Organization form', async ({ page },testInfo) => {
     
     // Navigate to the Register Organization page
     await page.locator(RegisterOrganizationLocators.registerOrgBtn).click();
@@ -43,7 +43,7 @@ test.describe('Register Organization Form Scenarios', () => {
     expect(await page.locator(RegisterOrganizationLocators.signatoryQatarIDValidation).textContent()).toBe("Signatory QID is required");
     expect(await page.locator(RegisterOrganizationLocators.signatoryContactNumValidation).textContent()).toBe("Signatory contact number is required");
     expect(await page.locator(RegisterOrganizationLocators.authorizerLetterUploadValidation).textContent()).toBe("Authorizer letter  is required");
-    expect(await page.locator(RegisterOrganizationLocators.establishmentCardUploadValidation).textContent()).toBe("Upload Establishment Card Image  is required");
+    expect(await page.locator(RegisterOrganizationLocators.establishmentCardUploadValidation).textContent()).toBe("Establishment Card Image is required");
 
     await loginPage.attachScreenshot(testInfo, 'Required Fields Validation',true);
   });

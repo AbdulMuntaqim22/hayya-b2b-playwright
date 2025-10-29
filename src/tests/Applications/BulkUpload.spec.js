@@ -9,7 +9,7 @@ import { AllApplicationLocators } from '../../Locators/allApplicationLocators';
 import { OrgGroupsLocators } from '../../Locators/orgGroupsLocators';
 import { EventsLocators } from '../../Locators/eventsLocators';
 
-test.describe.only('Bulk Upload Application Scenarios', () => {
+test.describe('Bulk Upload Application Scenarios', () => {
   let loginPage;
   let newApp;
   let credentials;
@@ -1974,6 +1974,99 @@ test.describe.only('Bulk Upload Application Scenarios', () => {
     await adminApi.deleteCompleteProfile(groupName);
     // Deleting the Group
     await adminApi.deleteGroup(visaData.orgName, groupName);
+  });
+
+  test('Verify that the user can see the Errors for Failed Bulk Upload', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_Negative;
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);    
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+    
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var remarks = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td[6]`);
+    await page.waitForTimeout(2000);
+    await expect(remarks).toHaveText('Verification Failed! Due to invalid face match.');
+
+    await newApp.attachScreenshot(testInfo, `Bulk upload failed with error message`);
+
+  });
+
+  test('Verify that the user have to upload Passport Back Image in Bulk Upload for some countries', async ({ page }, testInfo) => {
+    var data = visaData.BulkUpload_Passport;
+    // Fill and Save the Application as Draft
+    var groupName = await newApp.fill_Bulk_Upload(testInfo, data);    
+
+    // Navigating to All Applications Page
+    await page.locator(AllApplicationLocators.allAppLeftMenuBtn).click();
+    await page.waitForLoadState('load');
+    await page.locator(OrgGroupsLocators.groupTableRows).first().waitFor({ state: 'visible' });
+
+    // Verifying that the Application is created with status Bulk-Draft
+    var appRows = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']/parent::td/preceding-sibling::td/span[text()='Bulk-Upload']`);
+    var appRowCount = await appRows.count();
+    for (let i = 0; i < appRowCount; i++) {
+      await expect(appRows.nth(i)).toBeVisible();
+    }
+
+    await newApp.attachScreenshot(testInfo, `The Bulk upload is processed ${groupName}`);
+
+    // Navigating to Organization Groups Page
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).waitFor({ state: "attached" });
+    await page.waitForTimeout(2000);
+    await page.locator(OrgGroupsLocators.orgGroupsLeftMenu).click();
+    await page.locator(OrgGroupsLocators.header).waitFor({ state: "visible" });
+
+
+    // Verifying that the Group is created
+    var groupRow = page.locator(OrgGroupsLocators.groupTableRows).locator(`//td/p[text()='${groupName}']`);
+    await expect(groupRow).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, `The ${groupName} is created`);
+
+    // Filling the Applications
+
+    // 1. Clicking on the Actions button
+    await groupRow.locator("xpath=parent::td/preceding-sibling::td[3]/button").click();
+    await page.locator(OrgGroupsLocators.viewBulkSummaryBtn).click();
+    await page.waitForLoadState('load');
+
+    await page.locator(OrgGroupsLocators.viewDetailsBtn).click();
+    await page.waitForLoadState('load');
+    //For loop
+    // Editing the Application
+    await page.locator(OrgGroupsLocators.groupTableRows).nth(0).waitFor({ state: 'visible' });
+    await page.waitForTimeout(2000);
+    var totalApps = await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").count();
+
+    for (let i = 0; i < totalApps; i++) {
+      await page.locator(OrgGroupsLocators.groupTableRows).locator("//td//button").nth(i).click();
+
+      // Selecting Occupation Type
+      await page.locator(NewApplicationLocators.occupationTypeSelect).fill(data.D3.occupationType);
+      await page.locator(NewApplicationLocators.occupationTypeSelect).press('Enter');
+    }
+
   });
 
 

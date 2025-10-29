@@ -29,6 +29,6 @@ export const RegisterOrganizationLocators = {
     authorizerLetterUpload: "#upload_authorizerletter",
     authorizerLetterUploadValidation: "//input[@id='upload_authorizerletter']/parent::div/p",
     establishmentCardUpload: "#upload_uploadestablishmentcardimage",
-    establishmentCardUploadValidation: "//input[@id='upload_uploadestablishmentcardimage']/parent::div/p",
+    establishmentCardUploadValidation: "//input[@id='upload_establishmentcardimage']/parent::div/p",
     verifyBtn: "//button[text()='Verify']",
 };

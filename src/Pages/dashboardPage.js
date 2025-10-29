@@ -67,9 +67,7 @@ class DashboardPage extends BasePage {
         await this.page.waitForLoadState('networkidle')
         await this.page.waitForTimeout(1000); // Wait for the page to load completely
 
-        // Filling Admin Details            
-        await this.page.locator(DashboardLocators.adminSelectTxt).type('HMPAuto', { delay: 100 });
-        await this.page.locator(DashboardLocators.adminSelectTxt).press('Enter');
+        // Filling Admin Details                    
         await this.page.locator(DashboardLocators.firstNameTxt).fill('HMPAuto');
         await this.page.locator(DashboardLocators.lastNameTxt).fill('Rep');
         await this.page.locator(DashboardLocators.nationalitySelectTxt).fill('Argentina');
@@ -78,6 +76,8 @@ class DashboardPage extends BasePage {
         await this.page.locator(DashboardLocators.emailAddressTxt).fill(repEmail);
         await this.page.locator(DashboardLocators.contactNumberTxt).fill('1234567890');
         await this.page.locator(DashboardLocators.passportQidDoc).setInputFiles("./src/Resources/Permit.jpg");
+        await this.page.locator(DashboardLocators.adminSelectTxt).type('HMPAuto', { delay: 500 });
+        await this.page.locator(DashboardLocators.adminSelectTxt).press('Enter');
 
         await this.attachScreenshot(testInfo, 'Representative Data Fields are filled', true);
 
