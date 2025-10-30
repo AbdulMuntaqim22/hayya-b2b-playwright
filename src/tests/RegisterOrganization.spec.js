@@ -4,7 +4,7 @@ import LoginPage from '../Pages/loginPage';
 import RegisterOrganizationPage from '../Pages/registerOrganizationPage';
 const { RegisterOrganizationLocators } = require('../Locators/registerOrganizationLocators');
 
-test.describe.only('Register Organization Form Scenarios', () => {  
+test.describe('Register Organization Form Scenarios', () => {  
   var loginPage;  
   var regOrg;
   let credentials;
@@ -15,7 +15,7 @@ test.describe.only('Register Organization Form Scenarios', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.newUser);
   });
 
-  test.only('Verify that the following fields are required in Register Organization form', async ({ page },testInfo) => {
+  test('Verify that the following fields are required in Register Organization form', async ({ page },testInfo) => {
     
     // Navigate to the Register Organization page
     await page.locator(RegisterOrganizationLocators.registerOrgBtn).click();

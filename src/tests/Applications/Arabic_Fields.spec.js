@@ -35,7 +35,7 @@ test.describe('Arabic Fields', () => {
   });
 
   for (const country of exemptedCountries.countries01) {
-    test(`Verify Payment Exemption for A1 Visa: ${country}`, async ({ page }, testInfo) => {
+    test(`Verify Arabic fields Appeared for: ${country}`, async ({ page }, testInfo) => {
 
       var data = {
         "visaCat": "Tourist",

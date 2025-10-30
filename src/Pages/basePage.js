@@ -125,7 +125,7 @@ class BasePage {
       ));
 
       // Shift to Qatar timezone (UTC+3)
-      futureDate.setHours(futureDate.getHours() - 5);
+      futureDate.setHours(futureDate.getHours() - 2);
 
       var day = futureDate.getUTCDate().toString().padStart(2, '0');
       var month = futureDate.toLocaleString('default', { month: 'short' }).slice(0, 3);
