@@ -908,6 +908,305 @@ test.describe('Events Page Scenarios', () => {
     
   });
 
+    test('Verify that the Number of Event Visas field does not accept invalid characters or string', async ({ page }, testInfo) => {
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
+
+    // Entering Alphabets in Number of Event Visas field
+    await page.locator(EventsLocators.eventVisaQtnTxt).click();
+    await page.locator(EventsLocators.eventVisaQtnTxt).type("ABCD");
+    expect(await page.locator(EventsLocators.eventVisaQtnTxt).inputValue()).toBe("");
+
+    await loginPage.attachScreenshot(testInfo, 'Number of Event Visas field does not accept string', true);   
+
+    // Entering special Characters in Number of Event Visas field
+    await page.locator(EventsLocators.eventVisaQtnTxt).click();
+    await page.locator(EventsLocators.eventVisaQtnTxt).type("!@#$%^&*().;'[]?/");
+    expect(await page.locator(EventsLocators.eventVisaQtnTxt).inputValue("value")).toBe("");
+
+    await loginPage.attachScreenshot(testInfo, 'Number of Event Visas field does not accept special characters', true); 
+    
+    // Entering Numbers in Number of Event Visas field
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill('1234');
+    expect(await page.locator(EventsLocators.eventVisaQtnTxt).inputValue("value")).toBe("1234");
+
+    await loginPage.attachScreenshot(testInfo, 'Number of Event Visas field accept numbers', true); 
+    
+  });
+
+  test('Verify that the Event Location field does not accept invalid characters', async ({ page }, testInfo) => {
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();  
+
+    // Entering special Characters in Event Location field    
+    await page.locator(EventsLocators.eventLocationTxt).fill("!@#$%^&*().;'[]?/");
+    await page.locator(EventsLocators.nextBtn).click();
+    expect(await page.locator(EventsLocators.eventLocationValidationTxt).textContent()).toBe("No special characters allowed.");    
+
+    await loginPage.attachScreenshot(testInfo, 'Event Location field does not accept special characters', true); 
+    
+    // Entering only number in Event Location field    
+    await page.locator(EventsLocators.eventLocationTxt).fill("12324568987");
+    await page.locator(EventsLocators.nextBtn).click();
+    await expect(page.locator(EventsLocators.eventLocationValidationTxt)).not.toBeAttached();
+    expect(await page.locator(EventsLocators.eventLocationTxt).inputValue("value")).toBe("12324568987");
+
+    await loginPage.attachScreenshot(testInfo, 'Event Location field accept only Numbers characters', true); 
+
+    // Entering valid values in Event Location field
+    await page.locator(EventsLocators.eventLocationTxt).fill("Not Decided 123");
+    await page.locator(EventsLocators.nextBtn).click();
+    await expect(page.locator(EventsLocators.eventLocationValidationTxt)).not.toBeAttached();
+    expect(await page.locator(EventsLocators.eventLocationTxt).inputValue("value")).toBe("Not Decided 123");
+
+    await loginPage.attachScreenshot(testInfo, 'Event Location field accept strings and numbers characters', true); 
+    
+  });
+
+  test('Verify that the Sponsoring Entity field does not accept invalid characters', async ({ page }, testInfo) => {
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();  
+
+    // Entering special Characters in Sponsoring Entity field    
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill("!@#$%^&*().;'[]?/");
+    await page.locator(EventsLocators.nextBtn).click();
+    expect(await page.locator(EventsLocators.sponsoringEntityValidationTxt).textContent()).toBe("No special characters allowed.");    
+
+    await loginPage.attachScreenshot(testInfo, 'Sponsoring Entity field does not accept special characters', true); 
+    
+    // Entering only number in Sponsoring Entity field    
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill("12324568987");
+    await page.locator(EventsLocators.nextBtn).click();
+    await expect(page.locator(EventsLocators.sponsoringEntityValidationTxt)).not.toBeAttached();
+    expect(await page.locator(EventsLocators.sponsoringEntityTxt).inputValue("value")).toBe("12324568987");
+
+    await loginPage.attachScreenshot(testInfo, 'Sponsoring Entity field accept only Numbers characters', true); 
+
+    // Entering valid values in Sponsoring Entity field
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill("Not Decided 123");
+    await page.locator(EventsLocators.nextBtn).click();
+    await expect(page.locator(EventsLocators.sponsoringEntityValidationTxt)).not.toBeAttached();
+    expect(await page.locator(EventsLocators.sponsoringEntityTxt).inputValue("value")).toBe("Not Decided 123");
+
+    await loginPage.attachScreenshot(testInfo, 'Sponsoring Entity field accept strings and numbers characters', true); 
+    
+  });
+
+    test('Verify that the Passport QID field does not accept invalid Characters', async ({ page }, testInfo) => {
+
+    const date = new Date();
+    date.setDate(date.getDate() + 30);
+    const eventEndDate = eventsPage.formatDate(date);
+
+    date.setDate(date.getDate() - 1);
+    const plannnedEndDate = eventsPage.formatDate(date);    
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
+
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill("New Event");
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill('5');
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventEndDate);
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01", "00", "PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt, "05", "00", "PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill('Test Location');
+    await page.locator(EventsLocators.eventDetailsTxt).fill('Test Event Details');
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventEndDate);
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, plannnedEndDate);
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Entertainment').click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill('Test Entity');
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.locator(EventsLocators.hmpCheckbox).check();
+    await page.locator(EventsLocators.nextBtn).click();
+
+    //Entering special Characters in Passport QID field
+    await page.locator(EventsLocators.adminPassportQidTxt).fill("!@#$%^&*().;'[]?/");
+    expect(await page.locator(EventsLocators.adminPassportQidTxt).inputValue()).toBe("");
+    await loginPage.attachScreenshot(testInfo, 'Passport QID field does not accept special characters', true);
+
+    //Entering string Characters in Passport QID field
+    await page.locator(EventsLocators.adminPassportQidTxt).fill("ABCDE12345");
+    expect(await page.locator(EventsLocators.adminPassportQidTxt).inputValue()).toBe("ABCDE12345");
+    await loginPage.attachScreenshot(testInfo, 'Passport QID field accept string characters', true);
+    
+  });
+
+  test('Verify that the Add Another Admin button works correctly', async ({ page }, testInfo) => {
+
+    const date = new Date();
+    date.setDate(date.getDate() + 30);
+    const eventEndDate = eventsPage.formatDate(date);
+
+    date.setDate(date.getDate() - 1);
+    const plannnedEndDate = eventsPage.formatDate(date);    
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
+
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill("New Event");
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill('5');
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventEndDate);
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01", "00", "PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt, "05", "00", "PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill('Test Location');
+    await page.locator(EventsLocators.eventDetailsTxt).fill('Test Event Details');
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventEndDate);
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, plannnedEndDate);
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Entertainment').click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill('Test Entity');
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+    
+    await page.locator(EventsLocators.nextBtn).click();
+
+    //Clicking on Add Another Admin button
+    await page.locator(EventsLocators.addAnotherAdminBtn).click();
+    
+    
+    expect(await page.locator(EventsLocators.adminFirstNameTxt).count()).toBe(2); // Verify that there are now 2 admin first name fields
+    expect(await page.locator(EventsLocators.adminMiddleNameTxt).count()).toBe(2); // Verify that there are now 2 admin Middle name fields
+    expect(await page.locator(EventsLocators.adminThirdNameTxt).count()).toBe(2); // Verify that there are now 2 admin Third name fields
+    expect(await page.locator(EventsLocators.adminFourthNameTxt).count()).toBe(2); // Verify that there are now 2 admin Fourth Name fields
+    expect(await page.locator(EventsLocators.adminLastNameTxt).count()).toBe(2); // Verify that there are now 2 admin Last Name fields
+    expect(await page.locator(EventsLocators.adminNationalitySelectTxt).count()).toBe(2); // Verify that there are now 2 admin nationality fields
+    expect(await page.locator(EventsLocators.adminPassportQidTxt).count()).toBe(2); // Verify that there are now 2 admin Passport/QID fields
+    expect(await page.locator(EventsLocators.adminEmailAddressTxt).count()).toBe(2); // Verify that there are now 2 admin Email Address fields
+    expect(await page.locator(EventsLocators.adminContactNumberTxt).count()).toBe(2); // Verify that there are now 2 admin Contact Number fields
+    expect(await page.locator(EventsLocators.adminPassportQidDoc).count()).toBe(2); // Verify that there are now 2 admin Passport/QID Document upload fields
+
+    await loginPage.attachScreenshot(testInfo, 'Add Another Admin button works correctly', true);
+        
+  });
+
+  test('Verify that the Add Representative button works correctly', async ({ page }, testInfo) => {
+
+    const date = new Date();
+    date.setDate(date.getDate() + 30);
+    const eventEndDate = eventsPage.formatDate(date);
+
+    date.setDate(date.getDate() - 1);
+    const plannnedEndDate = eventsPage.formatDate(date);    
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();
+
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill("New Event");
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill('5');
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventEndDate);
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01", "00", "PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt, "05", "00", "PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill('Test Location');
+    await page.locator(EventsLocators.eventDetailsTxt).fill('Test Event Details');
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventEndDate);
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(new Date()));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, plannnedEndDate);
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText('Entertainment').click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill('Test Entity');
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+    
+    await page.locator(EventsLocators.nextBtn).click();
+
+    //Clicking on Add Representative button
+    await page.locator(EventsLocators.addRepresentativeBtn).click();
+    
+    
+    await expect(page.locator(EventsLocators.representativeFirstNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeMiddleNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeThirdNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeFourthNameTxt)).toBeVisible();    
+    await expect(page.locator(EventsLocators.representativeLastNameTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeNationalitySelectTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativePassportQidTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeEmailAddressTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativeContactNumberTxt)).toBeVisible();
+    await expect(page.locator(EventsLocators.representativePassportQidDoc)).toBeAttached();
+
+    await loginPage.attachScreenshot(testInfo, 'Add Representative button works correctly', true);
+        
+  });
   
   test('Verify that the Review Event Request Functionality Works correctly', async ({ page }, testInfo) => {
     
@@ -1041,6 +1340,254 @@ test.describe('Events Page Scenarios', () => {
     expect(await page.getByText("Email:").locator("xpath=./following-sibling::p").textContent()).toBe(adminEmailAddress);
     expect(await page.getByText("Contact:").locator("xpath=./following-sibling::p").textContent()).toBe(adminContactNumber);
     await loginPage.attachScreenshot(testInfo, 'The Review Page shows all the Filled Data Properly', true);   
+    
+  });
+
+    test('Verify that the Back Button works on Event Review Event Page', async ({ page }, testInfo) => {
+    
+    // Set event start and end dates
+    const eventStart = new Date();    
+    const eventEnd = new Date(eventStart);
+    eventEnd.setDate(eventStart.getDate() + 10);
+    const plannedStartDate = new Date(eventStart);
+    const plannedEndDate = new Date(eventStart);
+    plannedEndDate.setDate(eventStart.getDate() + 9);
+    
+    const randomFiveDigit = eventsPage.generateRandomFiveDigit();
+    const eventName = 'Auto Event ' + randomFiveDigit;
+    const eventLocation = 'Test Location';
+    const eventDetails = 'Test Event Details';
+    const sponsoringEntity = 'Test Entity';
+    const natureOfEvent = 'Entertainment';
+    const adminFirstName = 'HMPAuto';
+    const adminLastName = 'Admin';
+    const adminPassportQid = '122334455';
+    const adminEmailAddress = 'HMPAuto.Admin' + randomFiveDigit + '@yopmail.com';
+    const adminContactNumber = '1234567890';
+    const adminNationality = 'Argentina';
+    const quantity = '5';
+    const mediaPersonQuantity = '3';
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();    
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill(eventName);
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill(quantity);
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventsPage.formatDate(eventEnd));
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01","00","PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt,  "05","00","PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill(eventLocation);
+    await page.locator(EventsLocators.eventDetailsTxt).fill(eventDetails);
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(eventEnd));    
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(plannedStartDate));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, eventsPage.formatDate(plannedEndDate));
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText(natureOfEvent).click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill(sponsoringEntity);
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();    
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    // Verify the HMP checkbox is displayed and check it
+    await expect(page.locator(EventsLocators.hmpCheckbox)).toBeVisible();
+    
+    await page.locator(EventsLocators.hmpCheckbox).check();
+    await page.locator(EventsLocators.nextBtn).click();
+
+    
+    // Add HMP Details
+    await eventsPage.fillDatePicker(EventsLocators.peakAppSubmissionPeriodTxt, eventsPage.formatDate(eventStart));
+    await page.waitForTimeout(1000); // Wait for the date picker to update      
+    await eventsPage.fillDatePicker(EventsLocators.filmPermitStartDateTxt, eventsPage.formatDate(eventStart));
+    await page.waitForTimeout(1000); // Wait for the date picker to update
+    await eventsPage.fillDatePicker(EventsLocators.filmPermitEndDateTxt, eventsPage.formatDate(plannedEndDate));
+    await page.waitForTimeout(1000); // Wait for the date picker to update
+    await page.locator(EventsLocators.requiredMediaApplicationsTxt).fill(mediaPersonQuantity);
+
+    // Entering HMP Admin Details        
+    await page.locator(EventsLocators.adminFirstNameTxt).type(adminFirstName, {delay:100});  
+    await page.locator(EventsLocators.adminLastNameTxt).type(adminLastName, {delay:100});    
+    
+    await page.locator(EventsLocators.adminPassportQidTxt).type(adminPassportQid, {delay:100});
+    await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
+    await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
+
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
+    await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
+    await page.locator(EventsLocators.options).getByText(adminNationality).click();
+
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');             
+
+    //Entering Admin Details
+    await page.locator(EventsLocators.adminFirstNameTxt).type(adminFirstName, {delay:100});  
+    await page.locator(EventsLocators.adminLastNameTxt).type(adminLastName, {delay:100});    
+    
+    await page.locator(EventsLocators.adminPassportQidTxt).type(adminPassportQid, {delay:100});
+    await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
+    await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
+
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
+    await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
+    await page.locator(EventsLocators.options).getByText(adminNationality).click();
+
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+
+    await expect(page.getByText("Review Event Details")).toBeVisible();
+    await loginPage.attachScreenshot(testInfo, 'Navigated to Review Page', true);   
+
+    //Clicking on Back Button
+    await page.locator(EventsLocators.backBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.getByText("Event Creation")).toBeVisible();
+    
+    await loginPage.attachScreenshot(testInfo, 'Navigated Admin Details Page', true);   
+    
+  });
+
+  test('Verify that the Cancel Button works on Event Request Page', async ({ page }, testInfo) => {
+    
+    // Set event start and end dates
+    const eventStart = new Date();    
+    const eventEnd = new Date(eventStart);
+    eventEnd.setDate(eventStart.getDate() + 10);
+    const plannedStartDate = new Date(eventStart);
+    const plannedEndDate = new Date(eventStart);
+    plannedEndDate.setDate(eventStart.getDate() + 9);
+    
+    const randomFiveDigit = eventsPage.generateRandomFiveDigit();
+    const eventName = 'Auto Event ' + randomFiveDigit;
+    const eventLocation = 'Test Location';
+    const eventDetails = 'Test Event Details';
+    const sponsoringEntity = 'Test Entity';
+    const natureOfEvent = 'Entertainment';
+    const adminFirstName = 'HMPAuto';
+    const adminLastName = 'Admin';
+    const adminPassportQid = '122334455';
+    const adminEmailAddress = 'HMPAuto.Admin' + randomFiveDigit + '@yopmail.com';
+    const adminContactNumber = '1234567890';
+    const adminNationality = 'Argentina';
+    const quantity = '5';
+    const mediaPersonQuantity = '3';
+
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    // Clicking on the Add Event button
+    await page.locator(EventsLocators.addEventBtn).click();    
+
+    // Fill in the required fields
+    await page.locator(EventsLocators.eventNameTxt).fill(eventName);
+    await page.locator(EventsLocators.eventVisaQtnTxt).fill(quantity);
+    await eventsPage.fillDatePicker(EventsLocators.eventStartDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.eventEndDateTxt, eventsPage.formatDate(eventEnd));
+
+    await eventsPage.fillTimePicker(EventsLocators.eventStartTimeTxt, "01","00","PM");
+    await page.waitForTimeout(1000);
+    await eventsPage.fillTimePicker(EventsLocators.eventEndTimeTxt,  "05","00","PM");
+
+    await page.locator(EventsLocators.eventLocationTxt).fill(eventLocation);
+    await page.locator(EventsLocators.eventDetailsTxt).fill(eventDetails);
+
+
+    await eventsPage.fillDatePicker(EventsLocators.applicantArrivalDateTxt, eventsPage.formatDate(eventStart));
+    await eventsPage.fillDatePicker(EventsLocators.applicantDepartureDateTxt, eventsPage.formatDate(eventEnd));    
+
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppStartDateTxt, eventsPage.formatDate(plannedStartDate));
+    await eventsPage.fillDatePicker(EventsLocators.plannedAppEndDateTxt, eventsPage.formatDate(plannedEndDate));
+
+    await page.locator(EventsLocators.natureOfEventSelectTxt).click();
+    await page.getByText(natureOfEvent).click();
+    await page.locator(EventsLocators.sponsoringEntityTxt).fill(sponsoringEntity);
+
+    await page.locator(EventsLocators.authorizerLetterUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();
+    await page.locator(EventsLocators.establishmentCardUpload).setInputFiles('./src/Resources/Passports/Algeria/Passport 1.jpg');
+    await eventsPage.waitForLoaderToDisappear();    
+    await eventsPage.attachScreenshot(testInfo, 'Event Details Filled', true);
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    // Verify the HMP checkbox is displayed and check it
+    await expect(page.locator(EventsLocators.hmpCheckbox)).toBeVisible();
+    
+    await page.locator(EventsLocators.hmpCheckbox).check();
+    await page.locator(EventsLocators.nextBtn).click();
+
+    
+    // Add HMP Details
+    await eventsPage.fillDatePicker(EventsLocators.peakAppSubmissionPeriodTxt, eventsPage.formatDate(eventStart));
+    await page.waitForTimeout(1000); // Wait for the date picker to update      
+    await eventsPage.fillDatePicker(EventsLocators.filmPermitStartDateTxt, eventsPage.formatDate(eventStart));
+    await page.waitForTimeout(1000); // Wait for the date picker to update
+    await eventsPage.fillDatePicker(EventsLocators.filmPermitEndDateTxt, eventsPage.formatDate(plannedEndDate));
+    await page.waitForTimeout(1000); // Wait for the date picker to update
+    await page.locator(EventsLocators.requiredMediaApplicationsTxt).fill(mediaPersonQuantity);
+
+    // Entering HMP Admin Details        
+    await page.locator(EventsLocators.adminFirstNameTxt).type(adminFirstName, {delay:100});  
+    await page.locator(EventsLocators.adminLastNameTxt).type(adminLastName, {delay:100});    
+    
+    await page.locator(EventsLocators.adminPassportQidTxt).type(adminPassportQid, {delay:100});
+    await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
+    await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
+
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
+    await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
+    await page.locator(EventsLocators.options).getByText(adminNationality).click();
+
+    await page.locator(EventsLocators.nextBtn).click();
+    await page.waitForLoadState('domcontentloaded');             
+
+    //Entering Admin Details
+    await page.locator(EventsLocators.adminFirstNameTxt).type(adminFirstName, {delay:100});  
+    await page.locator(EventsLocators.adminLastNameTxt).type(adminLastName, {delay:100});    
+    
+    await page.locator(EventsLocators.adminPassportQidTxt).type(adminPassportQid, {delay:100});
+    await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
+    await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
+
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
+    await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
+    await page.locator(EventsLocators.options).getByText(adminNationality).click();
+
+    //Clicking on Cancel Button
+    await page.locator(EventsLocators.cancelBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+
+    await expect(page.getByText("HMP Details (Optional)")).toBeVisible();
+    await loginPage.attachScreenshot(testInfo, 'Navigated Bact to HMP Dtails Page', true);   
+
+    //Clicking on Cancel Button
+    await page.locator(EventsLocators.cancelBtn).click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.getByText("Event Creation")).toBeVisible();
+    await expect(page.locator(EventsLocators.conferenceVisaCheckbox)).toBeVisible();
+    
+    await loginPage.attachScreenshot(testInfo, 'Navigated Back to Previous Page', true);   
     
   });
 
@@ -1564,7 +2111,7 @@ test.describe('Events Page Scenarios', () => {
 
   });
 
-    test('Verify that View Event Information button functionality', async ({ page }, testInfo) => {    
+  test('Verify that View Event Information button functionality', async ({ page }, testInfo) => {    
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();    
 
@@ -1578,6 +2125,29 @@ test.describe('Events Page Scenarios', () => {
     await loginPage.attachScreenshot(testInfo, "The user is navigated to the Event Details Page", true);    
   });
 
+    test('Verify that the user can search Events', async ({ page }, testInfo) => {
+    // Navigate to the Events page
+    await page.locator(EventsLocators.eventLeftMenu).click();
+
+    await page.locator(EventsLocators.eventTable).locator("//tbody/tr/td[3]//p").first().waitFor({ state: 'visible' });
+
+    // Searching for an Event
+    await page.locator(EventsLocators.searchTxt).fill("Auto Event 4");
+    await page.locator(EventsLocators.searchBtn).click();
+
+    await page.locator(EventsLocators.eventTable).locator("//tbody/tr/td[3]//p").first().waitFor({ state: 'visible' });
+
+    //Validating the results
+    let allRows = page.locator(EventsLocators.eventTable).locator("//tbody/tr/td[3]//p");
+    const rowCount = await allRows.count();
+    for (let i = 0; i < rowCount; i++) {
+      const eventName = await allRows.nth(i).textContent();
+      expect(eventName).toContain("Auto Event 4");
+    }
+
+    await loginPage.attachScreenshot(testInfo, "The Events are searched successfully", true);
+
+  });
 
 
   test.afterEach(async ({ page }, testInfo) => {

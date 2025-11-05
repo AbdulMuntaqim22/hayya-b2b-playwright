@@ -9,7 +9,7 @@ const { OrgGroupsLocators } = require('../../Locators/orgGroupsLocators');
 
 test.describe.configure({ mode: 'parallel' });
 
-test.describe.only('Manual Application Scenarios - Rejected With Reason', () => {  
+test.describe('Manual Application Scenarios - Rejected With Reason', () => {  
   var loginPage;  
   var newApp;
   let credentials;

@@ -49,7 +49,10 @@ test.describe('Tourist A1 Visa Payment Exempted Countries', () => {
         "contactNo": "123456789",
         "emergencyNo": "987654321",
         "country": country,
+        "arabicFirstName": "كيف",
+        "arabicLastName": "كيف",
         "otherNationality": true,
+        "otherNationalityCountry": `${country}`,
         "countryOfResidence": country
       }
 

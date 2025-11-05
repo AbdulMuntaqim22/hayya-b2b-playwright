@@ -78,7 +78,24 @@ export const EventsLocators = {
     continueBtn: "//button[text()='Continue']",
     eventTable: "//table",
 
-    
+    searchTxt: "//input[@placeholder='Search']",
+    searchBtn: "//button[text()='Search']",
+    cancelBtn: "//button[text()='Cancel']",
+    addAnotherAdminBtn: "//button[text()='Add Another Admin']",
+    addRepresentativeBtn: "//button[text()='Add Representative']",
+
+
+    representativeFirstNameTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'First Name')]/following-sibling::div/input",
+    representativeMiddleNameTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[text()='Middle Name']/following-sibling::div/input",
+    representativeThirdNameTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[text()='Third Name']/following-sibling::div/input",
+    representativeFourthNameTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[text()='Fourth Name']/following-sibling::div/input",
+    representativeLastNameTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Last Name')]/following-sibling::div/input",
+    representativeNationalitySelectTxt: "//p[text()='Representative']/parent::div/following-sibling::div//div[contains(text(),'Select Nationality')]",    
+    representativePassportQidTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Passport/QID Number')]/following-sibling::div/input",
+    representativePassportQidDoc: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Passport Document')]/following-sibling::div//input[@type='file']",
+    representativeEmailAddressTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Email Address')]/following-sibling::div/input",
+    representativeEmailAddressTxtValidation: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Email Address')]/following-sibling::p",
+    representativeContactNumberTxt: "//p[text()='Representative']/parent::div/following-sibling::div//label[contains(text(),'Contact Number')]/following-sibling::div/input",
 
 
 
