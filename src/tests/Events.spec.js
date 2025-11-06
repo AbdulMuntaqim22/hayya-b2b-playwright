@@ -106,7 +106,7 @@ test.describe('Events Page Scenarios', () => {
     await loginPage.attachScreenshot(testInfo, 'Events Page Fields are Required', true);
   });
 
-  test('Verify that Applicant Start Date Can be 30 days before Event Start Date', async ({ page }, testInfo) => {
+  test('Verify that Applicant Arrival Date Can be 30 days before Event Start Date', async ({ page }, testInfo) => {
 
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();
@@ -119,7 +119,7 @@ test.describe('Events Page Scenarios', () => {
     const lastMonthDate = eventsPage.formatDate(date);
 
     const date2 = new Date();
-    date2.setDate(date.getDate() - 31);
+    date2.setDate(date2.getDate() - 31);
     const lastMonthDate2 = eventsPage.formatDate(date2);
 
     //filling Event Start Date
@@ -804,10 +804,9 @@ test.describe('Events Page Scenarios', () => {
 
     // Attaching Passport Copy
     await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Passports/Palestine/Passport 2.jpg");
-    await expect(page.locator("//div[@role='presentation']//img")).toBeVisible();
+    await expect(page.locator("//p[@title='View File']")).toBeVisible();
     await loginPage.attachScreenshot(testInfo, 'Passport/QID attached', true);   
-    
-    await page.getByText('Close').click();
+        
   });
 
   test('Verify that the Name fields does not accept invalid characters or Numbers', async ({ page }, testInfo) => {
@@ -1295,8 +1294,7 @@ test.describe('Events Page Scenarios', () => {
     await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
     await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
 
-    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");
-    await page.getByText('Close').click();
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
     await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
     await page.locator(EventsLocators.options).getByText(adminNationality).click();
 
@@ -1311,8 +1309,7 @@ test.describe('Events Page Scenarios', () => {
     await page.locator(EventsLocators.adminEmailAddressTxt).type(adminEmailAddress, {delay:100});    
     await page.locator(EventsLocators.adminContactNumberTxt).fill(adminContactNumber);
 
-    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");
-    await page.getByText('Close').click();
+    await page.locator(EventsLocators.adminPassportQidDoc).setInputFiles("./src/Resources/Permit.jpg");    
     await page.locator(EventsLocators.adminNationalitySelectTxt).click();        
     await page.locator(EventsLocators.options).getByText(adminNationality).click();
 
