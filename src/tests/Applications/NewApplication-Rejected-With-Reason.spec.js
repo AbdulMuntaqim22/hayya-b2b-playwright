@@ -31,12 +31,10 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
 
     await adminApi.init(); // Initialize the API instance
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
-    await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllProfiles(visaData.orgName);
 
     // Logging in before each test    
-    await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
-
-    await adminApi.deleteAllProfiles();
+    await loginPage.login(testInfo, credentials.requestorUsers.existingUser);    
   });
 
   test('A1: Verify that the user will be blocked and for applying and updating the Application when it is Rejected With a Reason', async ({ page }, testInfo) => {
@@ -1636,7 +1634,7 @@ test.describe('Manual Application Scenarios - Rejected With Reason', () => {
     console.log(`Test completed: ${testInfo.title} with status: ${testInfo.status}`);
     // For example, you might want to take a screenshot or log out
     await loginPage.attachScreenshot(testInfo, 'Test Completed');
-    await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllProfiles(visaData.orgName);
   });
 
 });

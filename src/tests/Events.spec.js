@@ -907,7 +907,7 @@ test.describe('Events Page Scenarios', () => {
     
   });
 
-    test('Verify that the Number of Event Visas field does not accept invalid characters or string', async ({ page }, testInfo) => {
+  test('Verify that the Number of Event Visas field does not accept invalid characters or string', async ({ page }, testInfo) => {
 
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();
@@ -1003,7 +1003,7 @@ test.describe('Events Page Scenarios', () => {
     
   });
 
-    test('Verify that the Passport QID field does not accept invalid Characters', async ({ page }, testInfo) => {
+  test('Verify that the Passport QID field does not accept invalid Characters', async ({ page }, testInfo) => {
 
     const date = new Date();
     date.setDate(date.getDate() + 30);
@@ -1340,7 +1340,7 @@ test.describe('Events Page Scenarios', () => {
     
   });
 
-    test('Verify that the Back Button works on Event Review Event Page', async ({ page }, testInfo) => {
+  test('Verify that the Back Button works on Event Review Event Page', async ({ page }, testInfo) => {
     
     // Set event start and end dates
     const eventStart = new Date();    
@@ -2122,7 +2122,7 @@ test.describe('Events Page Scenarios', () => {
     await loginPage.attachScreenshot(testInfo, "The user is navigated to the Event Details Page", true);    
   });
 
-    test('Verify that the user can search Events', async ({ page }, testInfo) => {
+  test('Verify that the user can search Events', async ({ page }, testInfo) => {
     // Navigate to the Events page
     await page.locator(EventsLocators.eventLeftMenu).click();
 

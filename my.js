@@ -16,7 +16,7 @@ async function MyFunction(){
     await adminApi.init(); // Initialize the API instance
     await adminApi.GetAccessToken(credentials.adminUser);
 
-   await adminApi.deleteAllProfiles(); 
+   await adminApi.deleteAllProfiles(visaData.orgName); 
 
     await browser.close();
 }

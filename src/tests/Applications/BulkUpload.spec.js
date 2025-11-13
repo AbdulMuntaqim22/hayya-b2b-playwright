@@ -31,7 +31,7 @@ test.describe('Bulk Upload Application Scenarios', () => {
 
     await adminApi.init(); // Initialize the API instance
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
-    await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllProfiles(visaData.orgName);
 
     // Logging in before each test    
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
@@ -2073,8 +2073,8 @@ test.describe('Bulk Upload Application Scenarios', () => {
   test.afterEach(async ({ }, testInfo) => {
     // For example, you might want to take a screenshot or log out
     await loginPage.attachScreenshot(testInfo, 'Test Completed');
-    await adminApi.deleteAllProfiles();
-    await adminApi.deleteAllGroups();
+    await adminApi.deleteAllProfiles(visaData.orgName);
+    await adminApi.deleteAllGroups(visaData.orgName);
 
     // Add any cleanup code if necessary
     console.log(`Test completed: ${testInfo.title} with status: ${testInfo.status}`);

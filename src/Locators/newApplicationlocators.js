@@ -43,10 +43,15 @@ export const NewApplicationLocators = {
     femaleOption: "//label/span[text()='Female']/preceding-sibling::div/input",
 
     firstNameTxt: "//label[text()='First Name']/following-sibling::input",
+    firstNameValidationMsg: "//label[text()='First Name']/following-sibling::div/span",
     middleNameTxt: '//label[text()="Middle Name/Father\'s Name"]/following-sibling::input',
+    middleNameValidationMsg: '//label[text()="Middle Name/Father\'s Name"]/following-sibling::div/span',
     thirdNameTxt: "//label[text()='Third Name']/following-sibling::input",
+    thirdNameValidationMsg: "//label[text()='Third Name']/following-sibling::div/span",
     fourthNameTxt: "//label[text()='Fourth Name']/following-sibling::input",
+    fourthNameValidationMsg: "//label[text()='Fourth Name']/following-sibling::div/span",
     lastNameTxt: "//label[text()='Last Name']/following-sibling::input",
+    lastNameValidationMsg: "//label[text()='Last Name']/following-sibling::div/span",
 
     firstArabicNameTxt: "//label[text()='First Arabic Name']/following-sibling::input",
     secondArabicNameTxt: '//label[text()="Second Arabic Name"]/following-sibling::input',

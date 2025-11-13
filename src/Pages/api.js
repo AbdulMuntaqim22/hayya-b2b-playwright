@@ -135,9 +135,9 @@ async GetAccessToken(credentials) {
     expect(delGroup.statusCode).toBe(200);
   }
 
-  async deleteAllGroups(){
+  async deleteAllGroups(orgName){
     // Fetching All Organizations
-    const orgs = await this.GetRequest(`/api/sc/v1/Organization/get-all?PageNumber=1&PageSize=50&SearchTerm=Test Automation`);
+    const orgs = await this.GetRequest(`/api/sc/v1/Organization/get-all?PageNumber=1&PageSize=50&SearchTerm=${orgName}`);
     const orgId = orgs.result[0].globalId;
 
     // Fetching All Groups Under an Organization
@@ -170,10 +170,10 @@ async GetAccessToken(credentials) {
     }
   }
 
-  async deleteAllProfiles(){
+  async deleteAllProfiles(orgName){
     let profileId=[];
     // Retrieving All Submitted Applications Data
-    const subApp = await this.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": "Test Automation" });
+    const subApp = await this.PostRequest('/api/sc/v1/OrganizationGroup/get-all-applications', { "pageNumber": 1, "pageSize": 10, "searchTerm": orgName });
     const subAppGlobalId = subApp.jsonResponse.result.map(app => app.globalId);
     for (let i = 0; i < subAppGlobalId.length; i++) {
       let getAppData = await this.GetRequest(`/api/b2b/v1/OrganizationGroup/get-application-by-id/${subAppGlobalId[i]}`);

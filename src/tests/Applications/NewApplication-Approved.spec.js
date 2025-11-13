@@ -29,7 +29,7 @@ test.describe('Manual Application Scenarios: Approved', () => {
 
     await adminApi.init(); // Initialize the API instance
     adminUserData = await adminApi.GetAccessToken(credentials.adminUser);
-    await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllProfiles(visaData.orgName);
 
     // Logging in before each test    
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
@@ -1144,13 +1144,62 @@ test.describe('Manual Application Scenarios: Approved', () => {
 
   });
 
+  test.only('Verify Name field character limit in Manual Application', async ({ page }, testInfo) => {
+
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Tourist']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='A1 - Tourist Visa']`).click();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill("Group 001");
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Entering more than 20 characters in Name fields
+    await page.locator(NewApplicationLocators.firstNameTxt).fill("ThisIsAVeryLongFirstName");
+    await page.locator(NewApplicationLocators.middleNameTxt).fill("ThisIsAVeryLongLastName");
+    await page.locator(NewApplicationLocators.thirdNameTxt).fill("ThisIsAVeryLongLastName");
+    await page.locator(NewApplicationLocators.fourthNameTxt).fill("ThisIsAVeryLongLastName");
+    await page.locator(NewApplicationLocators.lastNameTxt).fill("ThisIsAVeryLongLastName");
+    
+    // Validating that the character limit error message is displayed
+    await expect(page.locator(NewApplicationLocators.firstNameValidationMsg)).toHaveText('Please enter alphabets and spaces only (max 20 characters)');
+    await expect(page.locator(NewApplicationLocators.middleNameValidationMsg)).toHaveText('Please enter alphabets and spaces only (max 20 characters)');
+    await expect(page.locator(NewApplicationLocators.thirdNameValidationMsg)).toHaveText('Please enter alphabets and spaces only (max 20 characters)');
+    await expect(page.locator(NewApplicationLocators.fourthNameValidationMsg)).toHaveText('Please enter alphabets and spaces only (max 20 characters)');
+    await expect(page.locator(NewApplicationLocators.lastNameValidationMsg)).toHaveText('Please enter alphabets and spaces only (max 20 characters)');
+
+    await newApp.attachScreenshot(testInfo, 'Name fields character limit validation messages are displayed');
+  });
+
 
   test.afterEach(async ({ page }, testInfo) => {
     // Add any cleanup code if necessary
     console.log(`Test completed: ${testInfo.title} with status: ${testInfo.status}`);
     // For example, you might want to take a screenshot or log out
     await loginPage.attachScreenshot(testInfo, 'Test Completed');
-    await adminApi.deleteAllProfiles();
+    await adminApi.deleteAllProfiles(visaData.orgName);
+    await adminApi.deleteAllDraftApps(visaData.orgName);
+    await adminApi.deleteAllGroups(visaData.orgName);
 
   });
 
