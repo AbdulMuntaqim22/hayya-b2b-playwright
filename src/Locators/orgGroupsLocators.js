@@ -1,4 +1,4 @@
-export const OrgGroupsLocators = {
+export const OrgGroupsLocators = {    
     orgGroupsLeftMenu: "//div[@role='button']//span[text()='Organization Groups']",
     groupTableRows: "//table/tbody/tr",
     viewDraftAppBtn: "//li[text()='View Draft Application']",

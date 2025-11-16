@@ -117,8 +117,13 @@ async GetAccessToken(credentials) {
     console.log(draftAppId);
 
     // Deleting the Application
-    const approveResponse = await this.PostRequest('/api/shared/v1/HayyaApplication/delete-draft-visa-application', draftAppId);
-    expect(approveResponse.statusCode).toBe(200);
+    try{
+      const approveResponse = await this.PostRequest('/api/shared/v1/HayyaApplication/delete-draft-visa-application', draftAppId);
+      expect(approveResponse.statusCode).toBe(200);
+    } 
+    catch(error){
+      console.error('Error deleting draft applications:', error);
+    }   
   }
 
   async deleteGroup(orgName, groupName){

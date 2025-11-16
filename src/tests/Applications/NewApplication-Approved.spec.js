@@ -1144,7 +1144,7 @@ test.describe('Manual Application Scenarios: Approved', () => {
 
   });
 
-  test.only('Verify Name field character limit in Manual Application', async ({ page }, testInfo) => {
+  test('Verify Name field character limit in Manual Application', async ({ page }, testInfo) => {
 
     // Navigating to New Application Page
     await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();

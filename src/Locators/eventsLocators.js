@@ -72,6 +72,7 @@ export const EventsLocators = {
     adminEmailAddressTxt: "//label[contains(text(),'Email Address')]/following-sibling::div/input",
     adminEmailAddressTxtValidation: "//label[contains(text(),'Email Address')]/following-sibling::p",
     adminContactNumberTxt: "//label[contains(text(),'Contact Number')]/following-sibling::div/input",
+    docExpDateTxt: "//label[contains(text(),'Document Expiry Date')]/following-sibling::div/input",
     selectedFlag: "//div[@class='selected-flag' and contains(@title, '[X]')]",
 
     submitApplicationBtn: "//button[text()='Submit Application']",

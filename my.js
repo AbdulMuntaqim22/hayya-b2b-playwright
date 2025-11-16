@@ -17,6 +17,8 @@ async function MyFunction(){
     await adminApi.GetAccessToken(credentials.adminUser);
 
    await adminApi.deleteAllProfiles(visaData.orgName); 
+   await adminApi.deleteAllDraftApps(visaData.orgName);
+   await adminApi.deleteAllGroups(visaData.orgName);
 
     await browser.close();
 }

@@ -89,6 +89,7 @@ class EventsPage extends BasePage {
       await this.page.locator(EventsLocators.adminLastNameTxt).type('Admin', {delay:100});    
       
       await this.page.locator(EventsLocators.adminPassportQidTxt).type('122334455', {delay:100});
+      await this.fillDatePicker(EventsLocators.docExpDateTxt,'12/31/2048');
       await this.page.locator(EventsLocators.adminEmailAddressTxt).type('HMPAuto.Admin' + randomFiveDigit + '@yopmail.com', {delay:100});    
       await this.page.locator(EventsLocators.adminContactNumberTxt).type('1234567890', {delay:100});
 
@@ -105,6 +106,7 @@ class EventsPage extends BasePage {
     await this.page.locator(EventsLocators.adminLastNameTxt).type('Admin', {delay:100});    
     
     await this.page.locator(EventsLocators.adminPassportQidTxt).type('122334455', {delay:100});
+    await this.fillDatePicker(EventsLocators.docExpDateTxt,'12/31/2048');
     await this.page.locator(EventsLocators.adminEmailAddressTxt).type('HMPAuto.Admin' + randomFiveDigit + '@yopmail.com', {delay:100});    
     await this.page.locator(EventsLocators.adminContactNumberTxt).type('1234567890', {delay:100});
 
