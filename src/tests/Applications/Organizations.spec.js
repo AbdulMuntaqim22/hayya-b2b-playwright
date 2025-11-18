@@ -27,7 +27,7 @@ test.describe('Organizations Page', () => {
     await loginPage.login(testInfo, credentials.requestorUsers.existingUser);
   });
 
-  test.only('Verify that the Requester can see Visa Quota, Event and Visa Types', async ({ page }, testInfo) => {
+  test('Verify that the Requester can see Visa Quota, Event and Visa Types', async ({ page }, testInfo) => {
 
     await page.click(OrganizationLocators.organizationLeftMenuBtn);
     await page.waitForSelector(OrganizationLocators.orgDetails);

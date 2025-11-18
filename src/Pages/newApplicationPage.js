@@ -30,13 +30,22 @@ class NewApplicationPage extends BasePage {
     // Wait for the first field of the manual application form to be visible
     await this.page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
 
-    //Selecting the Visa Category
-    await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
-    await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${data.visaCat}']`).click();
+    if (data.eventName) {
+      // Selecting Event Name
+      await this.page.locator(NewApplicationLocators.eventSelect).click();
+      await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${data.eventName}']`).click();
 
-    //Selecting the Visa Type
-    await this.page.locator(NewApplicationLocators.visaTypeSelect).click();
-    await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${data.visaType}']`).click();
+      await this.page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+    }
+    else {
+      //Selecting the Visa Category
+      await this.page.locator(NewApplicationLocators.visaCategorySelect).click();
+      await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${data.visaCat}']`).click();
+
+      //Selecting the Visa Type
+      await this.page.locator(NewApplicationLocators.visaTypeSelect).click();
+      await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${data.visaType}']`).click();
+    }
 
     // Entering Group Name
     await this.page.locator(NewApplicationLocators.groupNameTxt).fill(groupName);
@@ -48,72 +57,68 @@ class NewApplicationPage extends BasePage {
     await this.page.locator(NewApplicationLocators.nextBtn).click();
     await this.waitForLoaderToDisappear();
 
-    try {
+    if(!data.eventName) {
       // Selecting Purpose of Visit 
       await this.page.locator(NewApplicationLocators.visitTypeSelect).fill(data.purposeOfVisit);
       await this.page.locator(NewApplicationLocators.visitTypeSelect).press('Enter')
-
-      // Selecting Passport Type
-      await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
-      await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
-
-      // Uploading Passport and Profile Picture
-      await this.page.locator(NewApplicationLocators.personalPhoto).setInputFiles(data.personalPhoto);
-      await this.waitForLoaderToDisappear();
-      await this.page.waitForTimeout(2000);
-      await this.page.locator(NewApplicationLocators.passportImage).setInputFiles(data.passportPhoto);
-      await this.waitForLoaderToDisappear();
-
-      // Wait for the field to be populated (not empty)
-      await this.page.waitForFunction(
-        (xpath) => {
-          const el = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          return el && el.value && el.value.length > 0;
-        },
-        NewApplicationLocators.passportNumTxt
-      );
-
-      // Entering Arabic Names
-      if (data.arabicFirstName) {
-        await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
-      }
-      if (data.arabicLastName) {
-        await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
-      }
-
-      // Selecting Country of Birth
-      await this.page.locator(NewApplicationLocators.countryOfBirthSelect).fill(data.country);
-      await this.page.locator(NewApplicationLocators.countryOfBirthSelect).press('Enter');
-
-      // Selecting Country of Residence
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
-      await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).press('Enter');
-
-      // Selecting Previous/Other Nationality Question
-      if (data.otherNationality) {
-        await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
-        await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
-        await this.page.keyboard.press('Enter');
-      }
-      else {
-        await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
-      }
-
-      // Entering Contact and Emergency Contact number
-      await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
-      await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
-
-      await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
-      // Clicking on Save as Draft button    
-      await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
-      await this.page.locator(NewApplicationLocators.continueBtn).click();
     }
-    catch (error) {
 
-      await this.adminApi.deleteGroup(orgName, groupName);
+    // Selecting Passport Type
+    await this.page.locator(NewApplicationLocators.passportTypeSelect).fill(data.passportType);
+    await this.page.locator(NewApplicationLocators.passportTypeSelect).press('Enter');
 
-      throw new Error(`Test failed :${error instanceof Error ? error.stack : error}`);
+    // Uploading Passport and Profile Picture
+    await this.page.locator(NewApplicationLocators.personalPhoto).setInputFiles(data.personalPhoto);
+    await this.waitForLoaderToDisappear();
+    await this.page.waitForTimeout(2000);
+    await this.page.locator(NewApplicationLocators.passportImage).setInputFiles(data.passportPhoto);
+    await this.waitForLoaderToDisappear();
+
+    // Wait for the field to be populated (not empty)
+    await this.page.waitForFunction(
+      (xpath) => {
+        const el = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        return el && el.value && el.value.length > 0;
+      },
+      NewApplicationLocators.passportNumTxt
+    );
+
+    // Entering Arabic Names
+    if (data.arabicFirstName) {
+      await this.page.locator(NewApplicationLocators.firstArabicNameTxt).fill(data.arabicFirstName);
     }
+    if (data.arabicLastName) {
+      await this.page.locator(NewApplicationLocators.lastArabicNameTxt).fill(data.arabicLastName);
+    }
+
+    if(!data.eventName) {
+    // Selecting Country of Birth
+    await this.page.locator(NewApplicationLocators.countryOfBirthSelect).fill(data.country);
+    await this.page.locator(NewApplicationLocators.countryOfBirthSelect).press('Enter');
+    }
+
+    // Selecting Country of Residence
+    await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).fill(data.countryOfResidence);
+    await this.page.locator(NewApplicationLocators.countryOfResidenceSelect).press('Enter');
+
+    // Selecting Previous/Other Nationality Question
+    if (data.otherNationality) {
+      await this.page.locator(NewApplicationLocators.otherNationalityYesOption).check();
+      await this.page.locator(NewApplicationLocators.otherNationalityCountrySelect).fill(data.otherNationalityCountry);
+      await this.page.keyboard.press('Enter');
+    }
+    else {
+      await this.page.locator(NewApplicationLocators.otherNationalityNoOption).check();
+    }
+
+    // Entering Contact and Emergency Contact number
+    await this.page.locator(NewApplicationLocators.contactNoTxt).fill(data.contactNo);
+    await this.page.locator(NewApplicationLocators.emergencyContactNoTxt).fill(data.emergencyNo);
+
+    await this.attachScreenshot(testInfo, 'Manual Application Data is filled Correctly');
+    // Clicking on Save as Draft button    
+    await this.page.locator(NewApplicationLocators.saveAsDraftBtn).click();
+    await this.page.locator(NewApplicationLocators.continueBtn).click();
 
     return groupName;
   }
@@ -2110,7 +2115,7 @@ class NewApplicationPage extends BasePage {
 
     //Selecting the event
     await this.page.locator(NewApplicationLocators.eventSelect).click();
-    await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${eventName}']`).click();    
+    await this.page.locator(NewApplicationLocators.options).locator(`//li[text()='${eventName}']`).click();
 
     // Entering Group Name
     await this.page.locator(NewApplicationLocators.groupNameTxt).fill(groupName);
@@ -2121,19 +2126,19 @@ class NewApplicationPage extends BasePage {
     // Uploading the Zip file
     await this.page.locator(NewApplicationLocators.uploadZipFile).setInputFiles(data.zipFile);
 
-    
-      // selecting the Applicant Type
-      if (data.applicantType === "International") {
-        await this.page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
-      } else {
-        await this.page.locator(NewApplicationLocators.qatarResidentOptionCheckbox).check();
-      }
-      if (data.docType === 'Passport') {
-        await this.page.locator(NewApplicationLocators.passportOption).check();
-      }
-      else {
-        await this.page.locator(NewApplicationLocators.qidOption).check();
-      }    
+
+    // selecting the Applicant Type
+    if (data.applicantType === "International") {
+      await this.page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+    } else {
+      await this.page.locator(NewApplicationLocators.qatarResidentOptionCheckbox).check();
+    }
+    if (data.docType === 'Passport') {
+      await this.page.locator(NewApplicationLocators.passportOption).check();
+    }
+    else {
+      await this.page.locator(NewApplicationLocators.qidOption).check();
+    }
 
     // clicking on the submit button
     await this.page.locator(NewApplicationLocators.submitBtn).click();

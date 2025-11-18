@@ -112,18 +112,14 @@ async GetAccessToken(credentials) {
     // Fetching All Draft Applications
     const draftApps = await this.PostRequest('/api/shared/v1/HayyaApplication/get-draft-applications', { "organizationGlobalId": orgId });
 
-    const draftAppId = draftApps.jsonResponse.result.map(app => app.globalId);
-    if (!draftAppId) throw new Error('No draft application with globalId found');
-    console.log(draftAppId);
+    const draftAppId = draftApps.jsonResponse.result.map(app => app.globalId);        
 
-    // Deleting the Application
-    try{
-      const approveResponse = await this.PostRequest('/api/shared/v1/HayyaApplication/delete-draft-visa-application', draftAppId);
-      expect(approveResponse.statusCode).toBe(200);
-    } 
-    catch(error){
-      console.error('Error deleting draft applications:', error);
-    }   
+    if(draftAppId.length != 0){
+    // Deleting the Application    
+    const approveResponse = await this.PostRequest('/api/shared/v1/HayyaApplication/delete-draft-visa-application', draftAppId);
+    expect(approveResponse.statusCode).toBe(200);
+    }
+    
   }
 
   async deleteGroup(orgName, groupName){
