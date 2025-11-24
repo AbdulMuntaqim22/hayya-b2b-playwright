@@ -362,6 +362,535 @@ test.describe('Manual Application Scenarios', () => {
     await newApp.attachScreenshot(testInfo, 'Data populated after uploading passport');
   });
 
+  test('Verify that the Profile and Passport fields accepts JPEG formats', async ({ page }, testInfo) => {
+
+    var photo = "./src/Resources/Images/jpeg ph format.jpg";
+    var passport = "./src/Resources/Images/jpeg ps format.jpg";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Tourist']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='A1 - Tourist Visa']`).click();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Passport and Profile Picture
+    await page.locator(NewApplicationLocators.personalPhoto).setInputFiles(photo);
+    await newApp.waitForLoaderToDisappear();
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.passportImage).setInputFiles(passport);
+    await newApp.waitForLoaderToDisappear();
+    //Verifying that the images are uploaded successfully
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.passportImage).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Profile and Passport fields accepts JPEG formats');
+  });
+
+  test('Verify that the Profile and Passport fields accepts GIF formats', async ({ page }, testInfo) => {
+
+    var photo = "./src/Resources/Images/gif ph format.gif";
+    var passport = "./src/Resources/Images/gif ps format.gif";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Tourist']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='A1 - Tourist Visa']`).click();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Passport and Profile Picture
+    await page.locator(NewApplicationLocators.personalPhoto).setInputFiles(photo);
+    await newApp.waitForLoaderToDisappear();
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.passportImage).setInputFiles(passport);
+    await newApp.waitForLoaderToDisappear();
+    //Verifying that the images are uploaded successfully
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.passportImage).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Profile and Passport fields accepts GIF formats');
+  });
+
+  test('Verify that the Profile and Passport fields accepts BITMAP formats', async ({ page }, testInfo) => {
+
+    var photo = "./src/Resources/Images/bitmap ph format.bmp";
+    var passport = "./src/Resources/Images/bitmap ps format.bmp";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Tourist']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='A1 - Tourist Visa']`).click();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Passport and Profile Picture
+    await page.locator(NewApplicationLocators.personalPhoto).setInputFiles(photo);
+    await newApp.waitForLoaderToDisappear();
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.passportImage).setInputFiles(passport);
+    await newApp.waitForLoaderToDisappear();
+    //Verifying that the images are uploaded successfully
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.passportImage).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Profile and Passport fields accepts BITMAP formats');
+  });
+
+  test('Verify that the Profile and Passport fields accepts PNG formats', async ({ page }, testInfo) => {
+
+    var photo = "./src/Resources/Images/png ph format.png";
+    var passport = "./src/Resources/Images/png ps format.png";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Tourist']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='A1 - Tourist Visa']`).click();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Passport and Profile Picture
+    await page.locator(NewApplicationLocators.personalPhoto).setInputFiles(photo);
+    await newApp.waitForLoaderToDisappear();
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.passportImage).setInputFiles(passport);
+    await newApp.waitForLoaderToDisappear();
+    //Verifying that the images are uploaded successfully
+    await expect(page.locator(NewApplicationLocators.personalPhoto).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.passportImage).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Profile and Passport fields accepts PNG formats');
+  });
+
+  test('Verify that the Required Attachment fields accepts PNG formats', async ({ page }, testInfo) => {
+
+    var attachment = "./src/Resources/Images/png ph format.png";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Diamond Visa']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='D2 - Diamond Hayya Talent']`).click();
+
+    // Selecting Applicant Type as International Applicant
+    await page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Attachments
+    await page.locator(NewApplicationLocators.policeClearanceDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.degreeDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.sectoralEndorsementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.cvDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.caseResearchDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+
+
+    await expect(page.locator(NewApplicationLocators.policeClearanceDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.degreeDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.sectoralEndorsementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.cvDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.caseResearchDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Required Attachment fields accepts PNG formats');
+  });
+
+  test('Verify that the Required Attachment fields accepts BITMAP formats', async ({ page }, testInfo) => {
+
+    var attachment = "./src/Resources/Images/bitmap ph format.bmp";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Diamond Visa']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='D2 - Diamond Hayya Talent']`).click();
+
+    // Selecting Applicant Type as International Applicant
+    await page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Attachments
+    await page.locator(NewApplicationLocators.policeClearanceDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.degreeDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.sectoralEndorsementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.cvDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.caseResearchDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+
+
+    await expect(page.locator(NewApplicationLocators.policeClearanceDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.degreeDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.sectoralEndorsementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.cvDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.caseResearchDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Required Attachment fields accepts BITMAP formats');
+  });
+
+  test('Verify that the Required Attachment fields accepts JPEG formats', async ({ page }, testInfo) => {
+
+    var attachment = "./src/Resources/Images/jpeg ph format.jpg";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Diamond Visa']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='D2 - Diamond Hayya Talent']`).click();
+
+    // Selecting Applicant Type as International Applicant
+    await page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Attachments
+    await page.locator(NewApplicationLocators.policeClearanceDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.degreeDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.sectoralEndorsementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.cvDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.caseResearchDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+
+
+    await expect(page.locator(NewApplicationLocators.policeClearanceDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.degreeDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.sectoralEndorsementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.cvDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.caseResearchDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Required Attachment fields accepts JPEG formats');
+  });
+
+  test('Verify that the Required Attachment fields accepts GIF formats', async ({ page }, testInfo) => {
+
+    var attachment = "./src/Resources/Images/gif ph format.gif";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Diamond Visa']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='D2 - Diamond Hayya Talent']`).click();
+
+    // Selecting Applicant Type as International Applicant
+    await page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Attachments
+    await page.locator(NewApplicationLocators.policeClearanceDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.degreeDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.sectoralEndorsementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.cvDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.caseResearchDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+
+
+    await expect(page.locator(NewApplicationLocators.policeClearanceDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.degreeDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.sectoralEndorsementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.cvDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.caseResearchDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=//following-sibling::div//img[@alt='Preview']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Required Attachment fields accepts GIF formats');
+  });
+
+    test('Verify that the Required Attachment fields accepts PDF formats', async ({ page }, testInfo) => {
+
+    var attachment = "./src/Resources/emptyPDF.pdf";
+    // Navigating to New Application Page
+    await page.locator(NewApplicationLocators.newAppLeftMenuBtn).click();
+
+    // Opening the Manual Application
+    await page.locator(NewApplicationLocators.manualAppBtn).click();
+
+
+    // Wait for the first field of the manual application form to be visible
+    await page.waitForSelector(NewApplicationLocators.visaTypeSelect, { state: 'visible' });
+
+    //Selecting the Visa Category
+    await page.locator(NewApplicationLocators.visaCategorySelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='Diamond Visa']`).click();
+
+    //Selecting the Visa Type
+    await page.locator(NewApplicationLocators.visaTypeSelect).click();
+    await page.locator(NewApplicationLocators.options).locator(`//li[text()='D2 - Diamond Hayya Talent']`).click();
+
+    // Selecting Applicant Type as International Applicant
+    await page.locator(NewApplicationLocators.internationalApplicantOptionCheckbox).check();
+
+    // Entering Group Name
+    await page.locator(NewApplicationLocators.groupNameTxt).fill(`Group ${newApp.generateRandomFiveDigit()}`);
+
+    // Entering Accommodation Details
+    await page.locator(NewApplicationLocators.accommodationDetailsTxt).fill("Abc Hotel");
+
+    // Clicking on the Next button
+    await page.locator(NewApplicationLocators.nextBtn).click();
+    await newApp.waitForLoaderToDisappear();
+
+    // Uploading Attachments
+    await page.locator(NewApplicationLocators.policeClearanceDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.degreeDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.sectoralEndorsementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.cvDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.caseResearchDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.bankStatementDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+    await page.locator(NewApplicationLocators.offerLetterDoc).setInputFiles(attachment);
+    await newApp.waitForLoaderToDisappear();
+    await page.waitForTimeout(2000);
+
+
+    await expect(page.locator(NewApplicationLocators.policeClearanceDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.degreeDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.sectoralEndorsementDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.cvDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.caseResearchDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.bankStatementDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+    await expect(page.locator(NewApplicationLocators.offerLetterDoc).locator("xpath=//following-sibling::div//iframe[@title='pdf']")).toBeVisible();
+
+    await newApp.attachScreenshot(testInfo, 'The Required Attachment fields accepts PDF formats');
+  });
+
 
   test.afterEach(async ({ page }, testInfo) => {
     // Add any cleanup code if necessary
